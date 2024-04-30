@@ -1,0 +1,26 @@
+#!/bin/sh
+
+if [ $# -lt 2 ]; then
+    printf '%s\n' "$0 <format> <url>"
+    exit 1
+fi
+
+case $1 in
+    mp3)
+        yt-dlp "$2" \
+                --extract-audio \
+                --audio-format mp3 \
+                --audio-quality 0 \
+                --add-metadata \
+                --embed-thumbnail \
+                --ppa "EmbedThumbnail+ffmpeg_o:-c:v mjpeg \
+                -vf crop=\"'if(gt(ih,iw),iw,ih)':'if(gt(iw,ih),ih,iw)'\"" \
+                -o "$HOME/Music/%(title)s.%(ext)s"
+        ;;
+    mp4)
+        yt-dlp "$2" \
+                --write-sub --sub-lang=en \
+                -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]/best' \
+                -o "$HOME/Videos/%(title)s.%(ext)s"
+        ;;
+esac

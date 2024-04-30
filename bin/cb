@@ -1,0 +1,20 @@
+#!/bin/sh
+
+palette() {
+    local a='\033[48;5;%dm%s'
+    printf "$a$a\n" \
+	    "$1" "$(width)" \
+	    "$(($1+8))" "$(width)"
+}
+
+width() {
+    local v='4'
+    printf '%*s' "$v" ""
+}
+
+while [ "$i" != 8 ]; do
+    palette "$i"
+    i=$((i + 1))
+done
+
+printf '\033[0m\n'

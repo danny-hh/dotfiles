@@ -1,0 +1,76 @@
+#o:alsa
+
+@hooks [
+    {
+        func load
+        files [
+            "$HOME/.asoundrc"
+        ]
+
+        @func getenv
+        vars [
+            rate_value 44100
+        ]
+        errors false
+    }
+]
+
+defaults.ctl.card 1
+defaults.pcm.card 1
+
+# playback alias
+pcm.plugj {
+  type plug
+  slave slavej
+}
+
+pcm_slave.slavej {
+  pcm "hw:1,0"
+  channels 2
+    rate {
+        @func refer
+        name rate_value
+    }
+}
+
+# change sampling rate
+pcm.!default {
+      type plug
+      slave.pcm "dmix"
+}
+
+pcm.!default {
+  type dmix
+  ipc_key 1024
+  slave {
+    pcm "plughw:1,0"
+    periods 128
+    period_time 0
+    period_size 1024
+    buffer_size 4096
+    rate {
+        @func refer
+        name rate_value
+      }
+   }
+}
+
+# volume boost
+pcm.!default {
+    type plug
+    slave.pcm "softvol"
+}
+
+pcm.softvol {
+    type softvol
+    slave {
+        pcm "dmix"
+    }
+    control {
+        name "Pre-Amp"
+        card 1
+    }
+    min_dB -5.0
+    max_dB 20.0
+    resolution 6
+}

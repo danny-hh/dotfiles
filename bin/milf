@@ -1,0 +1,24 @@
+#!/bin/sh
+
+TERM="foot -e"
+IMAGE="mpv"
+VIDEO="mpv"
+MUSIC="mpv --script=$HOME/.config/mpv/script-opts/piko.lua"
+
+case "${1##*.}" in
+    docx | doc | pdf)
+        $BROWSER "$1" 
+        ;;
+    png | jpe | jpg | jpeg | jfif | avif | webp | gifv | gif)
+        $IMAGE "$1" "$PWD" 
+        ;;
+    webm | mkv | mp4)
+        $VIDEO "$1" "$PWD" 
+        ;;
+    opus | mp3 | flv)
+        $TERM $MUSIC "$1" "$PWD" 
+        ;;
+    *)
+        $TERM $EDITOR "$1" 
+        ;;
+esac

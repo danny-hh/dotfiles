@@ -1,0 +1,7 @@
+log
+restrict
+hash =  0,15
+
+nick = irhl
+host = irc.libera.chat
+port = 6697
