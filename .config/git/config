@@ -1,10 +1,5 @@
-[alias]  nc = commit -a --allow-empty-message -m \"\"
-         sc = "!f() { git commit -m 'om undergång och de tretton järtekn'; }; f"
-         l  = !git log    | vim -R -
-         s  = !git status | vim -R -
-
 [user]   name = irhl
-         email = irhl@users.noreply.github.com 
+         email = irhl@users.noreply.github.com
          signingkey = ~/.ssh/id_ed25519
 
 [gpg]    format = ssh
