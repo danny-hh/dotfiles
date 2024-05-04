@@ -85,4 +85,9 @@ M.options = {
     alang = 'nl,jp,jpn,en,eng',
 }
 
+M.scripts = {
+    -- mpv-player/mpv/tree/master/TOOLS/lua
+    "/.config/mpv/script-opts/autoload.lua"
+}
+
 return M

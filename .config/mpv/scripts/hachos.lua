@@ -22,3 +22,7 @@ end
 for opt, arg in pairs(config.options) do
     mp.set_property('options/' .. opt:gsub('_', '-'), arg)
 end
+
+for _, file in pairs(config.scripts) do
+    mp.commandv("load-script", os.getenv("HOME") .. file)
+end
