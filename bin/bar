@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# no fudgee bar if fail ok
+swaymsg -v || exit 1
+swaymsg resize set 470 55
+swaymsg move position 0 0
+
+used_bandwidth() {
+    while IFS= read -r line; do
+        # $1 <= (network interface)
+        # Usage: used_bandwidth "enp34s0"
+        if [ "${line%%:*}" = "$1" ]; then
+
+            # extract received data
+            iv=${line#*:}
+            iv=${iv#"${iv%%[![:space:]]*}"}
+            a=$(( ${iv%% *} / 1048576))
+
+            # extract transmitted data
+            for ch in $line; do
+                i=$((i + 1))
+                if [ "$i" = "10" ]; then
+                    transmitted="$ch"
+                    break
+                fi
+            done
+            b=$((transmitted / 1048576))
+
+            printf "%.1f MB / %.1f MB" "$a" "$b"
+            return
+        fi
+    done < /proc/net/dev
+}
+
+while true; do
+    a=$(date '+%A, %B %d %H:%M:%S')
+    b=$(used_bandwidth "enp34s0")
+    
+    printf '\033[0H\033[2K'
+    printf "$a -*- $b \033[37m($USER)\033[0m"
+    sleep 1
+done
