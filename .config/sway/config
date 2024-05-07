@@ -79,14 +79,20 @@ client.focused_inactive $ac $ac $ac $ac $ac
 client.unfocused        $ac $ac $ac $ac $ac
 client.urgent           $fg $fg $fg $fg $fg
 
-# dress cursor
 seat seat0 xcursor_theme \
-     "material_light_cursors"
+  "material_light_cursors" 24
 
-exec gsettings set org.gnome.desktop.interface cursor-theme \
-     "material_light_cursors"
+exec_always gsettings set org.gnome.desktop.interface cursor-theme \
+  "material_light_cursors" 24
 
+# disables the mouse middle click from
+# performing a primary selection paste.
+exec wl-paste -p --watch wl-copy -cp
+
+# turns off display in 40 minutes idle.
+# take a nap in 2 hours and 13 minutes.
+# resume on mouse and keyboard input.
 exec swayidle -w \
-  timeout 8000 'zzz' \
+  timeout 8000 'sudo zzz' \
   timeout 2400 'swaymsg "output * dpms off"' \
   resume       'swaymsg "output * dpms on"'
