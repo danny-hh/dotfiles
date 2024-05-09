@@ -2,7 +2,6 @@
 
 if [ "$TERM" = linux ]; then
     export PS1="-> "
-    export ENV="$HOME/.profile"
     export PATH="$HOME/.local/share/bin:$PATH"
     export LANG=en_US.UTF-8
     export CFLAGS="-O2 -pipe -march=native"
