@@ -1,41 +1,20 @@
 ;;; init.el -*- lexical-binding: t -*-
 
-(require 'multiple-cursors)
-(require 'rainbow-delimiters)
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-      (condition-case nil
-          ((((((test)))))) (error nil))
+(setq create-lockfiles nil
+      auto-save-default nil
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
-(require 'rainbow-mode)
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-  (add-hook 'css-mode-hook 'rainbow-mode)
+(setq version-control t
+      kept-new-versions 10
+      kept-old-versions 0
+      delete-old-versions t)
 
-(add-to-list 'custom-theme-load-path "~/.config/emacs.d/themes/")
-(load-theme 'untitled t)
-
-(menu-bar-mode -1)
-(show-paren-mode 1)
-(global-hl-line-mode)
-(prefer-coding-system 'utf-8)
-
-(setq create-lockfiles nil)
-(setq auto-save-default nil)
-(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
-(setq version-control t)
-(setq kept-new-versions 10)
-(setq kept-old-versions 0)
-(setq delete-old-versions t)
-(setq auto-save-interval 50)
-
-(let ((backup-dir (expand-file-name (concat user-emacs-directory "backups/")))
-      (auto-save-dir (expand-file-name (concat user-emacs-directory "auto-saves/"))))
+(let ((backup-dir (expand-file-name (concat user-emacs-directory "backups/"))))
   (if (not (file-exists-p backup-dir))
       (make-directory backup-dir t))
-  (if (not (file-exists-p auto-save-dir))
-      (make-directory auto-save-dir t))
-  (setq backup-directory-alist `(("." . ,backup-dir))
-        auto-save-file-name-transforms `((".*" ,auto-save-dir t))))
+  (setq backup-directory-alist `(("." . ,backup-dir))))
+
+(prefer-coding-system 'utf-8)
 
 ; enable local variable check
 (setq enable-local-eval 'maybe
@@ -44,30 +23,47 @@
 ; yes or no -> y or n
 (setq use-short-answers t)
 
-; disable startup screen
 (setq inhibit-startup-screen t
-      initial-buffer-choice nil)
+      initial-buffer-choice nil
+      confirm-kill-processes nil)
 
-; set startup echo area message
 (defun display-startup-echo-area-message ()
   (let ((user-name (getenv "USER")))
     (message "hi %s, happy hacking!" user-name)))
 
-; no deceased buffer jobs confirmation
-(setq confirm-kill-processes nil)
+(menu-bar-mode -1)
+(show-paren-mode 1)
+(global-hl-line-mode)
 
+(setq fill-column 120
+      tab-width 4)
+
+; disable line wrap &
 ; prefer spaces over tabs
-(setq-default indent-tabs-mode nil)
-(setq tab-width 4)
-
-; maximum fill column
-(setq-default fill-column 120)
-
-;; disable line wrapping
-(setq-default truncate-lines t)
+(setq-default truncate-lines t
+              indent-tabs-mode nil)
 
 ; trim trailing whitespaces on save
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
+
+(add-to-list 'custom-theme-load-path "~/.config/emacs.d/themes/")
+(load-theme 'untitled t)
+
+(require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+
+(require 'rainbow-mode)
+(add-hook 'css-mode-hook 'rainbow-mode)
+
+(require 'multiple-cursors)
+(global-set-key (kbd "M-n") 'mc/edit-lines)
+(global-set-key (kbd "<M-down>") 'mc/mark-more-like-this-extended); must press <ESC> after spawn.
+
+; general keybinds
+(global-set-key (kbd "C-/") 'undo-only)
+(global-set-key (kbd "C-?") 'undo-redo)
+(global-set-key (kbd "C-c r") 'revert-buffer)
 
 ; select and cut string
 (defun str-sel-cut (start end)
@@ -90,18 +86,23 @@
 
 (global-set-key (kbd "C-y") 'str-sel-replace)
 
-; spawn split window with an empty buffer
+; empty split window
 (defun win-split-new (direction)
   (let ((new-buffer (generate-new-buffer "*scratch*")))
     (pcase direction
-      ("below" (split-window-below))
-      ("right" (split-window-right)))
+      ('below (split-window-below))
+      ('right (split-window-right)))
     (switch-to-buffer new-buffer)))
 
-(global-set-key (kbd "C-x 2") (lambda () (interactive) (win-split-new "below")))
-(global-set-key (kbd "C-x 3") (lambda () (interactive) (win-split-new "right")))
+; quick focus window
+(defun win-focus-change (direction)
+  (pcase direction
+    ('up (windmove-up))
+    ('down (windmove-down))
+    ('left (windmove-left))
+    ('right (windmove-right))))
 
-; resize split window(v, h) with arrow keys
+; quick resize window
 (defun win-resize-proper (direction)
   (let ((resize-factor 5))
     (pcase direction
@@ -110,17 +111,16 @@
       ('left (enlarge-window-horizontally (- resize-factor)))
       ('right (enlarge-window-horizontally resize-factor)))))
 
-(global-set-key (kbd "<C-up>") (lambda () (interactive) (win-resize-proper 'up)))
-(global-set-key (kbd "<C-down>") (lambda () (interactive) (win-resize-proper 'down)))
-(global-set-key (kbd "<C-left>") (lambda () (interactive) (win-resize-proper 'left)))
-(global-set-key (kbd "<C-right>") (lambda () (interactive) (win-resize-proper 'right)))
-
-; other keybindings
-(global-set-key (kbd "C-/")      'undo-only)
-(global-set-key (kbd "C-?")      'undo-redo)
-(global-set-key (kbd "C-c r")    'revert-buffer)
-(global-set-key (kbd "M-n")      'mc/edit-lines)
-(global-set-key (kbd "<M-down>") 'mc/mark-more-like-this-extended); must press <ESC> after operation.
+(global-set-key (kbd "C-x 2")       (lambda () (interactive) (win-split-new     'below)))
+(global-set-key (kbd "C-x 3")       (lambda () (interactive) (win-split-new     'right)))
+(global-set-key (kbd "C-x <up>")    (lambda () (interactive) (win-focus-change  'up)))
+(global-set-key (kbd "C-x <down>")  (lambda () (interactive) (win-focus-change  'down)))
+(global-set-key (kbd "C-x <left>")  (lambda () (interactive) (win-focus-change  'left)))
+(global-set-key (kbd "C-x <right>") (lambda () (interactive) (win-focus-change  'right)))
+(global-set-key (kbd "<C-up>")      (lambda () (interactive) (win-resize-proper 'up)))
+(global-set-key (kbd "<C-down>")    (lambda () (interactive) (win-resize-proper 'down)))
+(global-set-key (kbd "<C-left>")    (lambda () (interactive) (win-resize-proper 'left)))
+(global-set-key (kbd "<C-right>")   (lambda () (interactive) (win-resize-proper 'right)))
 
 ;; credit: yorickvP on Github
 (setq wl-copy-process nil)
