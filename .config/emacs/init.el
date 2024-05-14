@@ -51,10 +51,10 @@
 
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 
 (require 'rainbow-mode)
 (add-hook 'css-mode-hook 'rainbow-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 
 (require 'multiple-cursors)
 (global-set-key (kbd "M-n") 'mc/edit-lines)
