@@ -21,9 +21,9 @@ while IFS= read -r line; do
         opt=${cmd%%:*}
         arg=${cmd#*:}
 
-	# trimming stuff, do string replacements
+        # trimming stuff, do string replacements
         # direct methods are not possible:
-	# https://www.shellcheck.net/wiki/SC3060
+        # https://www.shellcheck.net/wiki/SC3060
         str=""
         for pattern in $line; do
             [ $pattern = $opt ] && str=$str$arg || str="$str$pattern "

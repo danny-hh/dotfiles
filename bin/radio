@@ -4,4 +4,4 @@ pop="http://playerservices.streamtheworld.com/api/livestream-redirect/987FM_PREM
 #country="https://22963.live.streamtheworld.com/BMACHINERADIO_XUS_SC"
 
 mpv --script="$HOME/.config/mpv/script-opts/piko.lua" \
-	     "$pop"
+             "$pop"
