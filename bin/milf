@@ -1,7 +1,7 @@
 #!/bin/sh
 
-EDITOR="vim"
 BROWSER="firefox"
+EDITOR="emacs --init-directory $HOME/.config/emacs.d/"
 VIDEO="mpv"
 MUSIC="mpv --script=$HOME/.config/mpv/script-opts/piko.lua"
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$#" -ne 0 ]; then
+if [ $# -ne 0 ]; then
     printf '%s\n' "$0 [input] -> <command>"
     exit 1
 fi
@@ -21,14 +21,16 @@ while IFS= read -r line; do
         opt=${cmd%%:*}
         arg=${cmd#*:}
 
-        # trimming jobs, do string replacements
+	# trimming stuff, do string replacements
+        # direct methods are not possible:
+	# https://www.shellcheck.net/wiki/SC3060
         str=""
         for pattern in $line; do
-            [ "$pattern" = "$opt" ] && str="$str$arg " || str="$str$pattern "
+            [ $pattern = $opt ] && str=$str$arg || str="$str$pattern "
         done
 
-        line="$str"
+        line=$str
     done
 
-    eval "$line" || exit 1
+    eval $line || exit 1
 done

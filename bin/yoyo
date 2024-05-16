@@ -7,7 +7,7 @@ fi
 
 case $1 in
     mp3)
-        yt-dlp "$2" \
+        yt-dlp $2 \
                 --extract-audio \
                 --audio-format mp3 \
                 --audio-quality 0 \
@@ -18,7 +18,7 @@ case $1 in
                 -o "$HOME/Music/%(title)s.%(ext)s"
         ;;
     mp4)
-        yt-dlp "$2" \
+        yt-dlp $2 \
                 --write-sub --sub-lang=en \
                 -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]/best' \
                 -o "$HOME/Videos/%(title)s.%(ext)s"
