@@ -2,14 +2,14 @@
 
 palette() {
     cb='\033[48;5;%sm%s'
-    printf "$cb$cb\n" $1 "$(width)" \
-            $(($1+8))    "$(width)"
+    printf "$cb$cb\n" \
+	   $1 "$(width)" \
+	   $2 "$(width)"
 }
-
 width() { printf '%*s' 4 ":" ;}
 
 for i in 0 1 2 3 4 5 6 7; do
-    palette "$i"
+    palette "$i" "$((i + 8))"
 done
 
 printf '\033[0m\n'
