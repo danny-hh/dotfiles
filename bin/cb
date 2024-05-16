@@ -1,20 +1,15 @@
 #!/bin/sh
 
 palette() {
-    local a='\033[48;5;%dm%s'
-    printf "$a$a\n" \
-	    "$1" "$(width)" \
-	    $(($1+8)) "$(width)"
+    cb='\033[48;5;%sm%s'
+    printf "$cb$cb\n" $1 "$(width)" \
+	    $(($1+8))    "$(width)"
 }
 
-width() {
-    local iv='4'
-    printf '%*s' "$iv" ""
-}
+width() { printf '%*s' 4 ":" ;}
 
-while [ "$i" != 8 ]; do
-    palette $i
-    i=$((i + 1))
+for i in 0 1 2 3 4 5 6 7; do
+    palette "$i"
 done
 
 printf '\033[0m\n'
