@@ -3,8 +3,8 @@
 palette() {
     cb='\033[48;5;%sm%s'
     printf "$cb$cb\n" \
-	   $1 "$(width)" \
-	   $2 "$(width)"
+        $1 "$(width)" \
+        $2 "$(width)"
 }
 width() { printf '%*s' 4 ":" ;}
 
