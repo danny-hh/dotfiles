@@ -28,15 +28,15 @@
 (setq use-short-answers t)
 
 (setq inhibit-startup-screen t
-     initial-buffer-choice nil
-     confirm-kill-processes nil)
+      initial-buffer-choice nil
+      confirm-kill-processes nil)
 
 (setq default-frame-alist
        (append (list '(tool-bar-lines . 0)
-		     '(menu-bar-lines . 0)
-		     '(vertical-scroll-bars . nil)
-		     '(internal-border-width . 25)
-		     '(font . "Comic Code Medium 9"))))
+                     '(menu-bar-lines . 0)
+                     '(vertical-scroll-bars . nil)
+                     '(internal-border-width . 25)
+                     '(font . "Comic Code Medium 9"))))
 
 (setq window-divider-default-right-width 4
       window-divider-default-places 'right-only)
