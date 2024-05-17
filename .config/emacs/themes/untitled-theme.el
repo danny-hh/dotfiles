@@ -1,6 +1,6 @@
 (unless (>= emacs-major-version 29)
   (error
-    "hola payaso fuck you no fudgee barr for you motherfucker"))
+    "hola payaso fuck you no fudgee barr for you"))
 
 (deftheme untitled
   "untitled by irhl")
@@ -45,20 +45,27 @@
  '(font-lock-warning-face           ((t (:foreground "#5e5958"))))
 
  '(hl-line                          ((t (:background "#F5EFE8"))))
- '(region                           ((t (:background "#f0e4dd"))))
+ '(region                           ((t (:background "#f0e8e4"))))
  '(show-paren-match                 ((t (:background "#f5cac3"))))
- '(vertical-border                  ((t (:foreground "#f3ebeb"))))
 
- '(mode-line                        ((t (:foreground "#7c7773"
-                                         :background "#f4e7e1"))))
- '(mode-line-inactive               ((t (:foreground "#9d9ea0"
-                                         :background "#dfcfc5"))))
+ '(default                          ((t (:foreground "#5e5958" :background "#fcf5ee"))))
+ '(warning                          ((t (:foreground "#5e5958" :weight bold))))
+
+ '(header-line           ((t :weight bold :background "#f4e7e1" :foreground "#d3c2bb" :overline "#fcf5ee" :box (:line-width 6 :color "#f4e7e1" :style nil))))
+ '(mode-line             ((t :weight bold :background "#f4e7e1" :foreground "#d3c2bb" :overline "#fcf5ee" :box (:line-width 6 :color "#f4e7e1" :style nil))))
+ '(mode-line-active      ((t :weight bold :background "#f4e7e1" :foreground "#d3c2bb" :overline "#fcf5ee" :box (:line-width 6 :color "#f4e7e1" :style nil))))
+ '(mode-line-inactive    ((t :weight bold :background "#dfcfc5" :foreground "#9d9ea0" :overline "#fcf5ee" :box (:line-width 6 :color "#f4e7e1" :style nil))))
+
+ '(header-line-highlight ((t :box (:color nil))))
+ '(mode-line-highlight   ((t :box (:color nil))))
+
   (set-face-attribute 'header-line nil   :underline nil)
 
- '(default                          ((t (:foreground "#5e5958"
-                                         :background "#fcf5ee"))))
- '(warning                          ((t (:foreground "#5e5958"
-                                         :weight bold))))
+ '(vertical-border              ((t (:foreground "#f3ebeb"))))
+ '(window-divider               ((t (:foreground "#f5efe8"))))
+ '(window-divider-first-pixel   ((t (:foreground "#f5efe8"))))
+ '(window-divider-last-pixel    ((t (:foreground "#f5efe8"))))
+
  ;; end of highlight groups
  )
 

@@ -28,14 +28,26 @@
 (setq use-short-answers t)
 
 (setq inhibit-startup-screen t
-      initial-buffer-choice nil
-      confirm-kill-processes nil)
+     initial-buffer-choice nil
+     confirm-kill-processes nil)
+
+(setq default-frame-alist
+       (append (list '(tool-bar-lines . 0)
+		     '(menu-bar-lines . 0)
+		     '(vertical-scroll-bars . nil)
+		     '(internal-border-width . 25)
+		     '(font . "Comic Code Medium 9"))))
+
+(setq window-divider-default-right-width 4
+      window-divider-default-places 'right-only)
+
+(window-divider-mode 1)
+(set-fringe-mode  0)
 
 (defun display-startup-echo-area-message ()
   (let ((user-name (getenv "USER")))
     (message "hi %s, happy hacking!" user-name)))
 
-(menu-bar-mode -1)
 (show-paren-mode 1)
 (global-hl-line-mode)
 
@@ -45,6 +57,9 @@
 ;; disable line wrap, prefer spaces over tabs
 (setq-default truncate-lines t
               indent-tabs-mode nil)
+
+;; remove dollar sign at the end of truncated lines
+(set-display-table-slot standard-display-table 0 ?\ )
 
 ;; trim trailing whitespaces on save
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
@@ -138,9 +153,7 @@
 (add-to-list 'custom-theme-load-path "~/.config/emacs.d/themes/")
 (load-theme 'untitled t)
 
-;; statusline configuration
-(setq-default mode-line-format nil)
-
+;; my fudgee barr
 (defun evil-mode-state ()
   (cond
    ((evil-normal-state-p)   "NO")
@@ -151,17 +164,18 @@
    ((evil-operator-state-p) "O")
    (t "[?]")))
 
+(setq-default mode-line-format nil)
 (setq-default header-line-format
   '(:eval
-    (let* ((file-name (or buffer-file-name "Untitled"))
+    (let* ((file-name (or buffer-file-name "untitled"))
            (str-right (format " Ln %d, Col %d"
                               (line-number-at-pos)
                               (current-column)))
 
-           (str-left  (format " %s {%s} [%s] (%s%s%s)"
+           (str-left  (format " ⛅ %s [%s] (#%s) (%s%s%s)"
                               (file-name-nondirectory file-name)
-                              (if vc-mode (substring vc-mode 5) "b?")
                               (evil-mode-state)
+                              (if vc-mode (substring vc-mode 5) "?")
                               (format-mode-line mode-name)
                               (if abbrev-mode " ABBREV" "")
                               (if eldoc-mode " ELDOC" "")))
@@ -171,11 +185,16 @@
 
            (fill-length  (- (window-width)
                             (length str-left-p)
-                            (length str-right-p) 1)))
+                            (length str-right-p) 3)))
 
       (concat str-left-p (make-string (max fill-length 0) ?\s) str-right-p))))
 
 (add-hook 'post-command-hook 'force-mode-line-update)
+
+;; org mode
+(setq org-html-doctype "html5")
+(setq org-html-html5-fancy t)
+(setq org-html-postamble nil)
 
 ;; credit: yorickvP on Github
 (setq wl-copy-process nil)
