@@ -53,6 +53,8 @@
                                          :background "#f4e7e1"))))
  '(mode-line-inactive               ((t (:foreground "#9d9ea0"
                                          :background "#dfcfc5"))))
+  (set-face-attribute 'header-line nil   :underline nil)
+
  '(default                          ((t (:foreground "#5e5958"
                                          :background "#fcf5ee"))))
  '(warning                          ((t (:foreground "#5e5958"

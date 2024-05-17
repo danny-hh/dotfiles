@@ -1,4 +1,8 @@
 ;;; init.el -*- lexical-binding: t -*-
+;;; Commentary: my lisp machine configuration.
+
+;; a garbage truck for fast startup time
+(setq gc-cons-threshold (* 50 1000 1000))
 
 (setq create-lockfiles nil
       auto-save-default nil
@@ -16,11 +20,11 @@
 
 (prefer-coding-system 'utf-8)
 
-; enable local variable check
+;; enable local variable check
 (setq enable-local-eval 'maybe
       enable-local-variables t)
 
-; yes or no -> y or n
+;; yes or no -> y or n
 (setq use-short-answers t)
 
 (setq inhibit-startup-screen t
@@ -38,34 +42,14 @@
 (setq fill-column 120
       tab-width 4)
 
-; disable line wrap &
-; prefer spaces over tabs
+;; disable line wrap, prefer spaces over tabs
 (setq-default truncate-lines t
               indent-tabs-mode nil)
 
-; trim trailing whitespaces on save
+;; trim trailing whitespaces on save
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
-(add-to-list 'custom-theme-load-path "~/.config/emacs.d/themes/")
-(load-theme 'untitled t)
-
-(require 'rainbow-delimiters)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-
-(require 'rainbow-mode)
-(add-hook 'css-mode-hook 'rainbow-mode)
-(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-
-(require 'multiple-cursors)
-(global-set-key (kbd "M-n") 'mc/edit-lines)
-(global-set-key (kbd "<M-down>") 'mc/mark-more-like-this-extended); must press <ESC> after spawn.
-
-; general keybinds
-(global-set-key (kbd "C-/") 'undo-only)
-(global-set-key (kbd "C-?") 'undo-redo)
-(global-set-key (kbd "C-c r") 'revert-buffer)
-
-; select and cut string
+;; select and cut string
 (defun str-sel-cut (start end)
   (interactive "r")
   (let ((string (buffer-substring start end)))
@@ -73,9 +57,9 @@
     (kill-new string)))
 
 (str-sel-cut (point) (point-at-eol))
-(global-set-key (kbd "C-c x") 'str-sel-cut)
+(global-set-key (kbd "C-d") 'str-sel-cut)
 
-; select and replace string
+;; select and replace string
 (defun str-sel-replace ()
   (interactive)
   (if (region-active-p)
@@ -86,7 +70,18 @@
 
 (global-set-key (kbd "C-y") 'str-sel-replace)
 
-; empty split window
+;; close windows with unmodified buffers: 'M-x win-close RET'
+(defun win-close ()
+  (interactive)
+  (dolist (buffer (buffer-list))
+    (unless (or (buffer-modified-p buffer)
+                (string-prefix-p " *Minibuf" (buffer-name buffer)))
+      (let ((window (get-buffer-window buffer)))
+        (when window
+          (delete-window window)))
+      (kill-buffer buffer))))
+
+;; empty split window
 (defun win-split-new (direction)
   (let ((new-buffer (generate-new-buffer "*scratch*")))
     (pcase direction
@@ -94,7 +89,7 @@
       ('right (split-window-right)))
     (switch-to-buffer new-buffer)))
 
-; quick focus window
+;; quick focus window
 (defun win-focus-change (direction)
   (pcase direction
     ('up (windmove-up))
@@ -102,7 +97,7 @@
     ('left (windmove-left))
     ('right (windmove-right))))
 
-; quick resize window
+;; quick resize window
 (defun win-resize-proper (direction)
   (let ((resize-factor 5))
     (pcase direction
@@ -117,10 +112,70 @@
 (global-set-key (kbd "C-x <down>")  (lambda () (interactive) (win-focus-change  'down)))
 (global-set-key (kbd "C-x <left>")  (lambda () (interactive) (win-focus-change  'left)))
 (global-set-key (kbd "C-x <right>") (lambda () (interactive) (win-focus-change  'right)))
-(global-set-key (kbd "<C-up>")      (lambda () (interactive) (win-resize-proper 'up)))
-(global-set-key (kbd "<C-down>")    (lambda () (interactive) (win-resize-proper 'down)))
-(global-set-key (kbd "<C-left>")    (lambda () (interactive) (win-resize-proper 'left)))
-(global-set-key (kbd "<C-right>")   (lambda () (interactive) (win-resize-proper 'right)))
+(global-set-key (kbd "<M-up>")      (lambda () (interactive) (win-resize-proper 'up)))
+(global-set-key (kbd "<M-down>")    (lambda () (interactive) (win-resize-proper 'down)))
+(global-set-key (kbd "<M-left>")    (lambda () (interactive) (win-resize-proper 'left)))
+(global-set-key (kbd "<M-right>")   (lambda () (interactive) (win-resize-proper 'right)))
+
+;; map C-c to delete windows quicker
+(global-set-key (kbd "C-c") 'delete-window)
+
+(require 'multiple-cursors)
+  :config
+  (global-set-key (kbd "M-n") 'mc/edit-lines)
+  (global-set-key (kbd "<C-down>") 'mc/mark-more-like-this-extended); must press <ESC> after spawn.
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package rainbow-mode
+  :hook ((css-mode emacs-lisp-mode) . rainbow-mode))
+
+;; evil-mode :D
+(load-file "~/.config/emacs.d/evil.el")
+
+;; load user themes
+(add-to-list 'custom-theme-load-path "~/.config/emacs.d/themes/")
+(load-theme 'untitled t)
+
+;; statusline configuration
+(setq-default mode-line-format nil)
+
+(defun evil-mode-state ()
+  (cond
+   ((evil-normal-state-p)   "NO")
+   ((evil-visual-state-p)   "VI")
+   ((evil-insert-state-p)   "I")
+   ((evil-emacs-state-p)    "E")
+   ((evil-motion-state-p)   "M")
+   ((evil-operator-state-p) "O")
+   (t "[?]")))
+
+(setq-default header-line-format
+  '(:eval
+    (let* ((file-name (or buffer-file-name "Untitled"))
+           (str-right (format " Ln %d, Col %d"
+                              (line-number-at-pos)
+                              (current-column)))
+
+           (str-left  (format " %s {%s} [%s] (%s%s%s)"
+                              (file-name-nondirectory file-name)
+                              (if vc-mode (substring vc-mode 5) "b?")
+                              (evil-mode-state)
+                              (format-mode-line mode-name)
+                              (if abbrev-mode " ABBREV" "")
+                              (if eldoc-mode " ELDOC" "")))
+
+           (str-right-p  (propertize str-right 'face 'mode-line-buffer-id))
+           (str-left-p   (propertize str-left  'face 'mode-line-buffer-id))
+
+           (fill-length  (- (window-width)
+                            (length str-left-p)
+                            (length str-right-p) 1)))
+
+      (concat str-left-p (make-string (max fill-length 0) ?\s) str-right-p))))
+
+(add-hook 'post-command-hook 'force-mode-line-update)
 
 ;; credit: yorickvP on Github
 (setq wl-copy-process nil)
