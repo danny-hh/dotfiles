@@ -56,10 +56,10 @@
 
 (setq default-frame-alist
        (append (list '(tool-bar-lines . 0)
-		     '(menu-bar-lines . 0)
-		     '(vertical-scroll-bars . nil)
-		     '(internal-border-width . 25)
-		     '(font . "Comic Code Medium 9"))))
+                     '(menu-bar-lines . 0)
+                     '(vertical-scroll-bars . nil)
+                     '(internal-border-width . 25)
+                     '(font . "Comic Code Medium 9"))))
 
 (setq window-divider-default-right-width 4
       window-divider-default-places 'right-only)
@@ -187,7 +187,7 @@
              (inon (if (eq window (selected-window))
                        (propertize "    " 'face 'icon-face)            ; Why not add the spaces directly
                        (propertize "    " 'face 'icon-face-inactive))) ; inside the icons? I cannot.
-                                                                               ; I don't need to tell why.
+                                                                       ; I don't need to tell why.
              (file (if (eq major-mode 'eww-mode)
                        (let ((url (plist-get eww-data :url)))                    ; It's better to just change the file name
                          (if url (concat "URL: " url)                            ; to the url address than completely using
