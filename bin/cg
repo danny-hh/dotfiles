@@ -10,12 +10,12 @@ while IFS= read -r line; do
     line="git $line"
 
     # create the aliases structure
-    for cmd in "sc: commit -m 'om undergång och de tretton järtekn'" \
+    for cmd in "cc: commit -m 'om undergång och de tretton järtekn'" \
                "nc: commit -a --allow-empty-message -m \"\"" \
                "s:  status" \
                "l:  log" \
                "ll: log --all --stat --decorate" \
-               "ct: shortlog --summary --numbered"; do
+               "sl: shortlog --summary --numbered"; do
 
         # extract contents of aliases structure
         opt=${cmd%%:*}

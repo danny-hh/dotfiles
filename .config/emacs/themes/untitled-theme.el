@@ -14,6 +14,26 @@
    '(("\\_<\\([+-]?[0-9]+\\.?[0-9]*\\)\\_>" 1
       '(face (:foreground "#ebaed4"))))))
 
+(defface icon-face
+  '((t (:family "FontAwesome"
+        :weight bold
+        :foreground  "#b8aaa5"
+        :background  "#faefea"
+        :overline    "#faefea"
+        :box (:color "#faefea"
+              :line-width 6
+              :style nil))))"")
+
+(defface icon-face-inactive
+  '((t (:family "FontAwesome"
+        :weight bold
+        :foreground  "#acaeb1"
+        :background  "#ebe2dc"
+        :overline    "#ebe2dc"
+        :box (:color "#ebe2dc"
+              :line-width 6
+              :style nil))))"")
+
 (custom-theme-set-faces
  'untitled
 
@@ -44,29 +64,82 @@
  '(font-lock-preprocessor           ((t (:foreground "#b3a7a9"))))
  '(font-lock-warning-face           ((t (:foreground "#5e5958"))))
 
+ '(vertical-border                  ((t (:foreground "#f3ebeb"))))
+ '(window-divider                   ((t (:foreground "#f5efe8"))))
+ '(window-divider-first-pixel       ((t (:foreground "#f5efe8"))))
+ '(window-divider-last-pixel        ((t (:foreground "#f5efe8"))))
+
  '(hl-line                          ((t (:background "#F5EFE8"))))
  '(region                           ((t (:background "#f0e8e4"))))
  '(show-paren-match                 ((t (:background "#f5cac3"))))
 
- '(default                          ((t (:foreground "#5e5958" :background "#fcf5ee"))))
- '(warning                          ((t (:foreground "#5e5958" :weight bold))))
+ ;; SECTION: webpages
+ '(highlight                        ((t (:foreground "#f5cac3"))))
+ '(browse-url-button                ((t (:foreground "#d3c2bb"))))
+ '(button                           ((t (:foreground "#d3c2bb"))))
+ '(shr-link                         ((t (:foreground "#9a9392"))))
 
- '(header-line           ((t :weight bold :background "#f4e7e1" :foreground "#d3c2bb" :overline "#fcf5ee" :box (:line-width 6 :color "#f4e7e1" :style nil))))
- '(mode-line             ((t :weight bold :background "#f4e7e1" :foreground "#d3c2bb" :overline "#fcf5ee" :box (:line-width 6 :color "#f4e7e1" :style nil))))
- '(mode-line-active      ((t :weight bold :background "#f4e7e1" :foreground "#d3c2bb" :overline "#fcf5ee" :box (:line-width 6 :color "#f4e7e1" :style nil))))
- '(mode-line-inactive    ((t :weight bold :background "#dfcfc5" :foreground "#9d9ea0" :overline "#fcf5ee" :box (:line-width 6 :color "#f4e7e1" :style nil))))
+ '(eww-form-text
+   ((t :weight bold
+       :background  "#efe8e1"
+       :box (:color "#5e5958"
+             :line-width 1
+             :style nil))))
 
- '(header-line-highlight ((t :box (:color nil))))
- '(mode-line-highlight   ((t :box (:color nil))))
+ '(eww-form-textarea
+   ((t :weight bold
+       :background  "#efe8e1"
+       :box (:color "#5e5958"
+             :line-width 1
+             :style nil))))
 
-  (set-face-attribute 'header-line nil   :underline nil)
+ '(eww-invalid-certificate
+   ((t (:foreground "#f5cac3"
+        :inherit bold))))
+ '(eww-valid-certificate
+   ((t (:foreground "#d3c2bb"
+        :inherit bold))))
 
- '(vertical-border              ((t (:foreground "#f3ebeb"))))
- '(window-divider               ((t (:foreground "#f5efe8"))))
- '(window-divider-first-pixel   ((t (:foreground "#f5efe8"))))
- '(window-divider-last-pixel    ((t (:foreground "#f5efe8"))))
+ ;; SECTION: fudgee barr
+ '(header-line
+   ((t :weight bold
+       :background  "#f4e7e1"
+       :foreground  "#d3c2bb"
+       :overline    "#fcf5ee"
+       :box (:color "#f4e7e1"
+             :line-width 6
+             :style nil))))
 
- ;; end of highlight groups
- )
+ '(mode-line
+   ((t :weight bold
+       :background  "#f4e7e1"
+       :foreground  "#d3c2bb"
+       :overline    "#fcf5ee"
+       :box (:color "#f4e7e1"
+             :line-width 6
+             :style nil))))
+
+ '(mode-line-inactive
+   ((t :weight bold
+       :background  "#e2d8d2"
+       :foreground  "#acaeb1"
+       :overline    "#fcf5ee"
+       :box (:color "#e2d8d2"
+             :line-width 5
+             :style nil))))
+
+ '(header-line-highlight
+   ((t :box (:color nil))))
+
+ '(mode-line-highlight
+   ((t :box (:color nil))))
+
+ ;; SECTION: defaults
+ '(warning
+   ((t (:foreground "#5e5958"
+        :weight bold))))
+ '(default
+   ((t (:foreground "#5e5958"
+        :background "#fcf5ee")))))
 
 (provide-theme 'untitled)

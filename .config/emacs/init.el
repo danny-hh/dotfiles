@@ -1,6 +1,29 @@
 ;;; init.el -*- lexical-binding: t -*-
 ;;; Commentary: my lisp machine configuration.
 
+(require 'package)
+(add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(defmacro install-packages (&rest packages)
+  `(progn
+     ,@(mapcar (lambda (pkg)
+                 `(use-package ,pkg :ensure t))
+               packages)))
+
+(install-packages
+ org
+ evil
+ multiple-cursors
+ rainbow-mode
+ rainbow-delimiters
+ fontawesome)
+
 ;; a garbage truck for fast startup time
 (setq gc-cons-threshold (* 50 1000 1000))
 
@@ -28,15 +51,15 @@
 (setq use-short-answers t)
 
 (setq inhibit-startup-screen t
-      initial-buffer-choice nil
-      confirm-kill-processes nil)
+     initial-buffer-choice nil
+     confirm-kill-processes nil)
 
 (setq default-frame-alist
        (append (list '(tool-bar-lines . 0)
-                     '(menu-bar-lines . 0)
-                     '(vertical-scroll-bars . nil)
-                     '(internal-border-width . 25)
-                     '(font . "Comic Code Medium 9"))))
+		     '(menu-bar-lines . 0)
+		     '(vertical-scroll-bars . nil)
+		     '(internal-border-width . 25)
+		     '(font . "Comic Code Medium 9"))))
 
 (setq window-divider-default-right-width 4
       window-divider-default-places 'right-only)
@@ -64,29 +87,9 @@
 ;; trim trailing whitespaces on save
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
-;; select and cut string
-(defun str-sel-cut (start end)
-  (interactive "r")
-  (let ((string (buffer-substring start end)))
-    (delete-region start end)
-    (kill-new string)))
-
-(str-sel-cut (point) (point-at-eol))
-(global-set-key (kbd "C-d") 'str-sel-cut)
-
-;; select and replace string
-(defun str-sel-replace ()
-  (interactive)
-  (if (region-active-p)
-      (let ((yanked-string (current-kill 0)))
-        (delete-region (region-beginning) (region-end))
-        (insert yanked-string))
-    (yank)))
-
-(global-set-key (kbd "C-y") 'str-sel-replace)
-
-;; close windows with unmodified buffers: 'M-x win-close RET'
+;; window management: close windows with unmodified buffers
 (defun win-close ()
+  "M-x win-close RET"
   (interactive)
   (dolist (buffer (buffer-list))
     (unless (or (buffer-modified-p buffer)
@@ -96,7 +99,16 @@
           (delete-window window)))
       (kill-buffer buffer))))
 
-;; empty split window
+;; window management: split, focus, resize
+(defmacro define-key-bindings (&rest bindings)
+  `(progn
+     ,@(mapcar (lambda (binding)
+                 (let ((key (car binding))
+                       (fn (intern (concat "win-" (symbol-name (cadr binding)))))
+                       (arg (caddr binding)))
+                   `(global-set-key (kbd ,key) (lambda () (interactive) (,fn ',arg)))))
+               bindings)))
+
 (defun win-split-new (direction)
   (let ((new-buffer (generate-new-buffer "*scratch*")))
     (pcase direction
@@ -104,7 +116,6 @@
       ('right (split-window-right)))
     (switch-to-buffer new-buffer)))
 
-;; quick focus window
 (defun win-focus-change (direction)
   (pcase direction
     ('up (windmove-up))
@@ -112,7 +123,6 @@
     ('left (windmove-left))
     ('right (windmove-right))))
 
-;; quick resize window
 (defun win-resize-proper (direction)
   (let ((resize-factor 5))
     (pcase direction
@@ -121,19 +131,17 @@
       ('left (enlarge-window-horizontally (- resize-factor)))
       ('right (enlarge-window-horizontally resize-factor)))))
 
-(global-set-key (kbd "C-x 2")       (lambda () (interactive) (win-split-new     'below)))
-(global-set-key (kbd "C-x 3")       (lambda () (interactive) (win-split-new     'right)))
-(global-set-key (kbd "C-x <up>")    (lambda () (interactive) (win-focus-change  'up)))
-(global-set-key (kbd "C-x <down>")  (lambda () (interactive) (win-focus-change  'down)))
-(global-set-key (kbd "C-x <left>")  (lambda () (interactive) (win-focus-change  'left)))
-(global-set-key (kbd "C-x <right>") (lambda () (interactive) (win-focus-change  'right)))
-(global-set-key (kbd "<M-up>")      (lambda () (interactive) (win-resize-proper 'up)))
-(global-set-key (kbd "<M-down>")    (lambda () (interactive) (win-resize-proper 'down)))
-(global-set-key (kbd "<M-left>")    (lambda () (interactive) (win-resize-proper 'left)))
-(global-set-key (kbd "<M-right>")   (lambda () (interactive) (win-resize-proper 'right)))
-
-;; map C-c to delete windows quicker
-(global-set-key (kbd "C-c") 'delete-window)
+(define-key-bindings
+ ("C-x 2"       split-new     below)
+ ("C-x 3"       split-new     right)
+ ("C-x <up>"    focus-change  up)
+ ("C-x <down>"  focus-change  down)
+ ("C-x <left>"  focus-change  left)
+ ("C-x <right>" focus-change  right)
+ ("<M-up>"      resize-proper up)
+ ("<M-down>"    resize-proper down)
+ ("<M-left>"    resize-proper left)
+ ("<M-right>"   resize-proper right))
 
 (require 'multiple-cursors)
   :config
@@ -146,14 +154,14 @@
 (use-package rainbow-mode
   :hook ((css-mode emacs-lisp-mode) . rainbow-mode))
 
-;; evil-mode :D
 (load-file "~/.config/emacs.d/evil.el")
 
-;; load user themes
 (add-to-list 'custom-theme-load-path "~/.config/emacs.d/themes/")
 (load-theme 'untitled t)
 
 ;; my fudgee barr
+(setq-default mode-line-format nil)
+
 (defun evil-mode-state ()
   (cond
    ((evil-normal-state-p)   "NO")
@@ -162,39 +170,92 @@
    ((evil-emacs-state-p)    "E")
    ((evil-motion-state-p)   "M")
    ((evil-operator-state-p) "O")
-   (t "[?]")))
+   (t "?")))
 
-(setq-default mode-line-format nil)
-(setq-default header-line-format
-  '(:eval
-    (let* ((file-name (or buffer-file-name "untitled"))
-           (str-right (format " Ln %d, Col %d"
-                              (line-number-at-pos)
-                              (current-column)))
+(defun fudgee-barr ()
+  (dolist (window (window-list))
+    (with-current-buffer (window-buffer window)
+      (let* ((str-right (format "Ln %d, Col %d     " ; <-- The reason why we are putting spaces here
+                                (line-number-at-pos) ; is to align the Ln and Col indicator properly.
+                                (current-column)))   ; Font Awesome has unicode icons that makes up
+                                                     ; the extra spaces that don't go along with the
+                                                     ; ascii code and it messes with the normal alignment.
+             (icon (if (eq window (selected-window))
+                       (propertize " " 'face 'icon-face)
+                       (propertize " " 'face 'icon-face-inactive)))
 
-           (str-left  (format " ⛅ %s [%s] (#%s) (%s%s%s)"
-                              (file-name-nondirectory file-name)
-                              (evil-mode-state)
-                              (if vc-mode (substring vc-mode 5) "?")
-                              (format-mode-line mode-name)
-                              (if abbrev-mode " ABBREV" "")
-                              (if eldoc-mode " ELDOC" "")))
+             (inon (if (eq window (selected-window))
+                       (propertize "    " 'face 'icon-face)            ; Why not add the spaces directly
+                       (propertize "    " 'face 'icon-face-inactive))) ; inside the icons? I cannot.
+                                                                               ; I don't need to tell why.
+             (file (if (eq major-mode 'eww-mode)
+                       (let ((url (plist-get eww-data :url)))                    ; It's better to just change the file name
+                         (if url (concat "URL: " url)                            ; to the url address than completely using
+                           "EWW"))                                               ; eww's own header property that replaces
+                     (file-name-nondirectory (or buffer-file-name "untitled")))) ; the custom header line.
 
-           (str-right-p  (propertize str-right 'face 'mode-line-buffer-id))
-           (str-left-p   (propertize str-left  'face 'mode-line-buffer-id))
+             (str-left  (format " %s [%s] (#%s) (%s%s%s)"
+                                    file
+                                    (evil-mode-state)
+                                    (if vc-mode (substring vc-mode 5) "?")
+                                    (format-mode-line mode-name)
+                                    (if abbrev-mode " ABBREV" "")
+                                    (if eldoc-mode " ELDOC" "")))
 
-           (fill-length  (- (window-width)
-                            (length str-left-p)
-                            (length str-right-p) 3)))
+             (fill-length (max 0 (- (window-width window)
+                                    (length str-left)
+                                    (length str-right) 0)))
 
-      (concat str-left-p (make-string (max fill-length 0) ?\s) str-right-p))))
+             (face (if (eq window (selected-window))
+                       'mode-line
+                       'mode-line-inactive))
 
-(add-hook 'post-command-hook 'force-mode-line-update)
+             (str-left-p  (propertize str-left 'face face))
+             (str-right-p (propertize str-right 'face face))
+             (str-cents-p (propertize (make-string fill-length ?\s) 'face face))
+
+             (macapuno (concat icon
+                               inon
+                               str-left-p
+                               str-cents-p
+                               str-right-p)))
+
+        (setq-local header-line-format macapuno)))))
+
+(add-hook 'window-configuration-change-hook 'fudgee-barr)
+(add-hook 'post-command-hook 'fudgee-barr)
 
 ;; org mode
 (setq org-html-doctype "html5")
 (setq org-html-html5-fancy t)
 (setq org-html-postamble nil)
+
+;; eww stuff
+(with-eval-after-load 'eww
+  (define-key eww-mode-map (kbd "C-x b") 'eww-back-url)
+  (define-key eww-mode-map (kbd "<f5>") 'eww-reload))
+
+(defun enter (url)
+  (interactive)
+  (eww url))
+
+(defun boo ()
+  "i don't know how to use the builtin bookmarks, i find my own easier."
+  (interactive)
+  (let ((items
+         '(("emacs"      . "http://web.archive.org/web/20070808235903/https://www.gnu.org/software/emacs/")
+           ("emacs girl" . "https://4chanarchives.com/board/k/thread/29900098")
+           ("t"          . "https://boards.4chan.org/g/")
+           ("fa"         . "https://boards.4chan.org/fa/")
+           ("his"        . "https://boards.4chan.org/his/")
+           ("furret"     . "https://e621.net/posts?page=4&tags=ke_mo_suke")
+           ("x"          . nil))))
+
+    (let* ((selected-item (completing-read ":// " (mapcar #'car items)))
+           (given-url (cdr (assoc selected-item items))))
+      (if given-url
+          (enter given-url)
+        (message "x")))))
 
 ;; credit: yorickvP on Github
 (setq wl-copy-process nil)
