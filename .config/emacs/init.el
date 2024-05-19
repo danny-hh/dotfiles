@@ -245,7 +245,7 @@
   (let ((items
          '(("emacs"      . "http://web.archive.org/web/20070808235903/https://www.gnu.org/software/emacs/")
            ("emacs girl" . "https://4chanarchives.com/board/k/thread/29900098")
-           ("t"          . "https://boards.4chan.org/g/")
+           ("g"          . "https://boards.4chan.org/g/")
            ("fa"         . "https://boards.4chan.org/fa/")
            ("his"        . "https://boards.4chan.org/his/")
            ("furret"     . "https://e621.net/posts?page=4&tags=ke_mo_suke")
