@@ -68,7 +68,7 @@ gaps bottom 98
 
 for_window [app_id=".*"] floating enable, titlebar hide
 for_window [app_id=foot] border pixel 1, resize set 440 340
-for_window [class=Emacs] border pixel 1, resize set 630 1200
+for_window [class=Emacs] border pixel 1
 for_window [app_id=mpv] border pixel 6
 
 # (i) border, background, foreground, indicator, child
