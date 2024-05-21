@@ -17,7 +17,6 @@
                packages)))
 
 (install-packages
- org
  evil
  multiple-cursors
  rainbow-mode
@@ -47,29 +46,29 @@
 (setq enable-local-eval 'maybe
       enable-local-variables t)
 
-;; yes or no -> y or n
-(setq use-short-answers t)
-
 (setq inhibit-startup-screen t
-     initial-buffer-choice nil
-     confirm-kill-processes nil)
+      initial-buffer-choice nil
+      confirm-kill-processes nil)
+
+(setq use-short-answers t); yes, no -> y, n
+
+(defun display-startup-echo-area-message ()
+  (let ((user-name (getenv "USER")))
+    (message "hi %s, happy hacking!" user-name)))
 
 (setq default-frame-alist
        (append (list '(tool-bar-lines . 0)
-                     '(menu-bar-lines . 0)
-                     '(vertical-scroll-bars . nil)
-                     '(internal-border-width . 25)
-                     '(font . "Comic Code Medium 9"))))
+		     '(menu-bar-lines . 0)
+                     '(left-fringe . 0)
+                     '(right-fringe . 0)
+		     '(internal-border-width . 25)
+		     '(vertical-scroll-bars . nil)
+		     '(font . "Comic Code Medium 9"))))
 
 (setq window-divider-default-right-width 4
       window-divider-default-places 'right-only)
 
 (window-divider-mode 1)
-(set-fringe-mode  0)
-
-(defun display-startup-echo-area-message ()
-  (let ((user-name (getenv "USER")))
-    (message "hi %s, happy hacking!" user-name)))
 
 (show-paren-mode 1)
 (global-hl-line-mode)
