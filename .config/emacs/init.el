@@ -58,12 +58,12 @@
 
 (setq default-frame-alist
        (append (list '(tool-bar-lines . 0)
-		     '(menu-bar-lines . 0)
+                     '(menu-bar-lines . 0)
                      '(left-fringe . 0)
                      '(right-fringe . 0)
-		     '(internal-border-width . 25)
-		     '(vertical-scroll-bars . nil)
-		     '(font . "Comic Code Medium 9"))))
+                     '(internal-border-width . 25)
+                     '(vertical-scroll-bars . nil)
+                     '(font . "Comic Code Medium 9"))))
 
 (setq window-divider-default-right-width 4
       window-divider-default-places 'right-only)
