@@ -19,7 +19,7 @@
 ;;   ;l
 ;;   _i_,
 ;;  l___l
-;;  \___/ fl.el
+;;  \___/ fl-theme.el
 
 (deftheme fl
   "flowershop by irhl")

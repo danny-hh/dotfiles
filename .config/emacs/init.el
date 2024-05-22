@@ -83,9 +83,6 @@
 ;; remove dollar sign at the end of truncated lines
 (set-display-table-slot standard-display-table 0 ?\ )
 
-;; trim trailing whitespaces on save
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
-
 ;; window management: close windows with unmodified buffers
 (defun win-close ()
   "M-x win-close RET"
@@ -212,7 +209,6 @@
                                str-left-p
                                str-cents-p
                                str-right-p)))
-
 
         (setq-local header-line-format macapuno)))))
 
