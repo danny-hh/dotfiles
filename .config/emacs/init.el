@@ -156,7 +156,7 @@
 (load-file "~/.config/emacs.d/evil.el")
 
 (add-to-list 'custom-theme-load-path "~/.config/emacs.d/themes/")
-(load-theme 'untitled t)
+(load-theme 'fl t)
 
 ;; my fudgee barr
 (setq-default mode-line-format nil)
@@ -174,32 +174,27 @@
 (defun fudgee-barr ()
   (dolist (window (window-list))
     (with-current-buffer (window-buffer window)
-      (let* ((str-right (format "Ln %d, Col %d     " ; <-- The reason why we are putting spaces here
+      (let* ((str-right (format "Ln %d, Col %d    "  ; <-- The reason why we are putting spaces here
                                 (line-number-at-pos) ; is to align the Ln and Col indicator properly.
                                 (current-column)))   ; Font Awesome has unicode icons that makes up
                                                      ; the extra spaces that don't go along with the
-                                                     ; ascii code and it messes with the normal alignment.
-             (icon (if (eq window (selected-window))
-                       (propertize " " 'face 'icon-face)
-                       (propertize " " 'face 'icon-face-inactive)))
+             (icon (if (eq window (selected-window)) ; ascii code and it messes with the normal alignment.
+                       (propertize "    " 'face 'icon-face)
+                       (propertize "    " 'face 'icon-face-inactive)))
 
-             (inon (if (eq window (selected-window))
-                       (propertize "    " 'face 'icon-face)            ; Why not add the spaces directly
-                       (propertize "    " 'face 'icon-face-inactive))) ; inside the icons? I cannot.
-                                                                       ; I don't need to tell why.
              (file (if (eq major-mode 'eww-mode)
                        (let ((url (plist-get eww-data :url)))                    ; It's better to just change the file name
                          (if url (concat "URL: " url)                            ; to the url address than completely using
                            "EWW"))                                               ; eww's own header property that replaces
-                     (file-name-nondirectory (or buffer-file-name "untitled")))) ; the custom header line.
+                     (file-name-nondirectory (or buffer-file-name "Untitled")))) ; the custom header line.
 
              (str-left  (format " %s [%s] (#%s) (%s%s%s)"
-                                    file
-                                    (evil-mode-state)
-                                    (if vc-mode (substring vc-mode 5) "?")
-                                    (format-mode-line mode-name)
-                                    (if abbrev-mode " ABBREV" "")
-                                    (if eldoc-mode " ELDOC" "")))
+                                file
+                                (evil-mode-state)
+                                (if vc-mode (substring vc-mode 5) "?")
+                                (format-mode-line mode-name)
+                                (if abbrev-mode " ABBREV" "")
+                                (if eldoc-mode " ELDOC" "")))
 
              (fill-length (max 0 (- (window-width window)
                                     (length str-left)
@@ -214,10 +209,10 @@
              (str-cents-p (propertize (make-string fill-length ?\s) 'face face))
 
              (macapuno (concat icon
-                               inon
                                str-left-p
                                str-cents-p
                                str-right-p)))
+
 
         (setq-local header-line-format macapuno)))))
 

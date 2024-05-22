@@ -2,8 +2,27 @@
   (error
     "hola payaso fuck you no fudgee barr for you"))
 
-(deftheme untitled
-  "untitled by irhl")
+;; 1. inspect face property on cursor
+;;      C-u C-x =
+;;
+;; 2. list present faces in current buffer
+;;      M-x list-faces-display RET
+;;
+;;   ,-_,.
+;; ,( _  ))
+;; 7 (_) 77
+;; ((   :))
+;;  ~__>~'
+;;   cY?'
+;;   `l,__
+;;    l7-'
+;;   ;l
+;;   _i_,
+;;  l___l
+;;  \___/ fl.el
+
+(deftheme fl
+  "flowershop by irhl")
 
 (defvar ext '(emacs-lisp-mode c-mode sh-mode bash-mode)
   "syntax highlighting for numbers")
@@ -17,25 +36,25 @@
 (defface icon-face
   '((t (:family "FontAwesome"
         :weight bold
-        :foreground  "#b8aaa5"
-        :background  "#faefea"
-        :overline    "#faefea"
-        :box (:color "#faefea"
-              :line-width 6
+       :background  "#e7ced6"
+       :foreground  "#bc8d9c"
+       :overline    "#e7ced6"
+       :box (:color "#e7ced6"
+              :line-width 3
               :style nil))))"")
 
 (defface icon-face-inactive
   '((t (:family "FontAwesome"
         :weight bold
-        :foreground  "#acaeb1"
-        :background  "#ebe2dc"
-        :overline    "#ebe2dc"
-        :box (:color "#ebe2dc"
-              :line-width 6
+       :background  "#e8dfd9"
+       :foreground  "#acaeb1"
+       :overline    "#e8dfd9"
+       :box (:color "#e8dfd9"
+              :line-width 3
               :style nil))))"")
 
 (custom-theme-set-faces
- 'untitled
+ 'fl
 
  '(rainbow-delimiters-depth-1-face  ((t (:foreground "#c79d83"))))
  '(rainbow-delimiters-depth-2-face  ((t (:foreground "#ebc3a9"))))
@@ -83,14 +102,14 @@
    ((t :weight bold
        :background  "#efe8e1"
        :box (:color "#5e5958"
-             :line-width 1
+             :line-width 2
              :style nil))))
 
  '(eww-form-textarea
    ((t :weight bold
        :background  "#efe8e1"
        :box (:color "#5e5958"
-             :line-width 1
+             :line-width 2
              :style nil))))
 
  '(eww-invalid-certificate
@@ -103,29 +122,26 @@
  ;; SECTION: fudgee barr
  '(header-line
    ((t :weight bold
-       :background  "#f4e7e1"
-       :foreground  "#d3c2bb"
-       :overline    "#fcf5ee"
-       :box (:color "#f4e7e1"
-             :line-width 6
+        :box (:color "#fcf5ee"
+             :line-width 2
              :style nil))))
 
  '(mode-line
    ((t :weight bold
-       :background  "#f4e7e1"
-       :foreground  "#d3c2bb"
-       :overline    "#fcf5ee"
-       :box (:color "#f4e7e1"
-             :line-width 6
+        :foreground  "#b59aa3"
+        :background  "#f5e5eb"
+        :overline    "#f5e5eb"
+        :box (:color "#f5e5eb"
+             :line-width 2
              :style nil))))
 
  '(mode-line-inactive
    ((t :weight bold
-       :background  "#e2d8d2"
-       :foreground  "#acaeb1"
-       :overline    "#fcf5ee"
-       :box (:color "#e2d8d2"
-             :line-width 5
+        :foreground  "#acaeb1"
+        :background  "#f0e8e2"
+        :overline    "#f0e8e2"
+        :box (:color "#f0e8e2"
+             :line-width 2
              :style nil))))
 
  '(header-line-highlight
@@ -142,4 +158,4 @@
    ((t (:foreground "#5e5958"
         :background "#fcf5ee")))))
 
-(provide-theme 'untitled)
+(provide-theme 'fl)
