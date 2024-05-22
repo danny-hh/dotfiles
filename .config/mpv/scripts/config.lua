@@ -25,7 +25,7 @@ M.keymaps = {
         'set video-pan-x  0 ; ' ..
         'set video-pan-y  0',
 
-    ['/'] = 'vf toggle hflip',
+    ['/, MBTN_RIGHT'] = 'vf toggle hflip',
     e = 'cycle_values video-rotate 90 180 270 0',
 
     f1 = 'af toggle superequalizer=2b=3:3b=1:4b=2',

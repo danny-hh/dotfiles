@@ -4,19 +4,15 @@ package.path = script_directory .. '?.lua;' .. package.path
 local mp = require 'mp'
 local config = require('config')
 
-for key, action in pairs(config.keymaps) do
-    local config = {}
-    if key == 'left' or key == 'right'
-	    or key == 'z' or key == 'Z'
-	    or key == 'x' or key == 'X'
-	    or key == 'f' or key == 'F'
-	    then
-        config = { 'repeatable' }
-    end
+for pattern, action in pairs(config.keymaps) do
+    for k in pattern:gmatch('[^,]+') do
+        local opt = k:match('[left|right|zZxXfF]')
+        and { "repeatable" } or {}
 
-    mp.add_forced_key_binding(key, function()
-        mp.command(action)
-    end, unpack(config))
+        mp.add_forced_key_binding(k, function()
+            mp.command(action)
+        end, unpack(opt))
+    end
 end
 
 for opt, arg in pairs(config.options) do
