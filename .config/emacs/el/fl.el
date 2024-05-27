@@ -1,7 +1,9 @@
-(unless (>= emacs-major-version 29)
-  (error
-    "hola payaso fuck you no fudgee barr for you"))
-
+;;; fl.el -*- lexical-binding: t -*-
+;;
+;; INSTALL:
+;; load the theme as any other .el file.
+;;
+;; COLOR PICK GUIDE:
 ;; 1. inspect face property on cursor
 ;;      C-u C-x =
 ;;
@@ -19,43 +21,46 @@
 ;;   ;l
 ;;   _i_,
 ;;  l___l
-;;  \___/ fl-theme.el
+;;  \___/ fl.el (flowershop by irhl)
 
-(deftheme fl
-  "flowershop by irhl")
+(unless (>= emacs-major-version 29)
+  (error
+    "hola payaso fuck you no fudgee barr for you"))
 
-(defvar ext '(emacs-lisp-mode c-mode sh-mode bash-mode)
-  "syntax highlighting for numbers")
-
+(defvar ext '(emacs-lisp-mode c-mode sh-mode bash-mode))
 (dolist (mode ext)
   (font-lock-add-keywords
    mode
    '(("\\_<\\([+-]?[0-9]+\\.?[0-9]*\\)\\_>" 1
-      '(face (:foreground "#ebaed4"))))))
+      '(face (:foreground "#ebaed4")))
+
+     ("\\<lambda\\>"
+      (0 (progn
+           (compose-region (match-beginning 0) (match-end 0)
+                           (make-char 'greek-iso8859-7 107))
+           nil))))))
 
 (defface icon-face
   '((t (:family "FontAwesome"
         :weight bold
-       :background  "#e7ced6"
-       :foreground  "#bc8d9c"
-       :overline    "#e7ced6"
-       :box (:color "#e7ced6"
+        :background  "#f9dcce"
+        :foreground  "#bca59b"
+        :overline    "#f9dcce"
+        :box (:color "#f9dcce"
               :line-width 3
               :style nil))))"")
 
 (defface icon-face-inactive
   '((t (:family "FontAwesome"
         :weight bold
-       :background  "#e8dfd9"
-       :foreground  "#acaeb1"
-       :overline    "#e8dfd9"
-       :box (:color "#e8dfd9"
+        :background  "#e6ddd7"
+        :foreground  "#acaeb1"
+        :overline    "#e6ddd7"
+        :box (:color "#e6ddd7"
               :line-width 3
               :style nil))))"")
 
-(custom-theme-set-faces
- 'fl
-
+(custom-set-faces
  '(rainbow-delimiters-depth-1-face  ((t (:foreground "#c79d83"))))
  '(rainbow-delimiters-depth-2-face  ((t (:foreground "#ebc3a9"))))
  '(rainbow-delimiters-depth-3-face  ((t (:foreground "#84badd"))))
@@ -88,15 +93,30 @@
  '(window-divider-first-pixel       ((t (:foreground "#f5efe8"))))
  '(window-divider-last-pixel        ((t (:foreground "#f5efe8"))))
 
- '(hl-line                          ((t (:background "#F5EFE8"))))
- '(region                           ((t (:background "#f0e8e4"))))
+ '(hl-line                          ((t (:background "#f5efe8"))))
+ '(region                           ((t (:background "#dcd6d3"))))
  '(show-paren-match                 ((t (:background "#f5cac3"))))
+
+ '(isearch
+   ((t (:foreground "#faefea"
+        :background "#b9b5ae"))))
+
+ '(lazy-highlight
+   ((t (:foreground "#b49c84"
+        :background "#edd7c2"))))
+
+ '(highlight-indent-guides-character-face
+   ((t (:foreground "#f0e8e4"))))
+
+ ;; SECTION: menu
+ '(minibuffer-prompt                ((t (:foreground "#9a9392"))))
 
  ;; SECTION: webpages
  '(highlight                        ((t (:foreground "#f5cac3"))))
  '(browse-url-button                ((t (:foreground "#d3c2bb"))))
  '(button                           ((t (:foreground "#d3c2bb"))))
  '(shr-link                         ((t (:foreground "#9a9392"))))
+ '(link                             ((t (:foreground "#84badd"))))
 
  '(eww-form-text
    ((t :weight bold
@@ -128,10 +148,10 @@
 
  '(mode-line
    ((t :weight bold
-        :foreground  "#b59aa3"
-        :background  "#f5e5eb"
-        :overline    "#f5e5eb"
-        :box (:color "#f5e5eb"
+        :foreground  "#b6a7a0"
+        :background  "#fae7de"
+        :overline    "#fae7de"
+        :box (:color "#fae7de"
              :line-width 2
              :style nil))))
 
@@ -157,5 +177,3 @@
  '(default
    ((t (:foreground "#5e5958"
         :background "#fcf5ee")))))
-
-(provide-theme 'fl)
