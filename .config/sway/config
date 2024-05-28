@@ -34,6 +34,7 @@ bindsym $mod+9 exec amixer -c 1 -q sset Master 4%-
 bindsym $mod+m exec chromium
 bindsym $mod+n exec firefox
 bindsym $mod+z exec foot
+bindsym $mod+e exec emacs --init-directory "/home/irhl/.config/emacs.d/"
 bindsym $mod+s exec grim -g "$(slurp)"      $HOME/$(date +%F-%H-%M-%S).jpg
 bindsym $mod+y exec grim -g "0,0 1920x1080" $HOME/$(date +%F-%H-%M-%S).jpg
 bindsym $mod+c kill
