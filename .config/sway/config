@@ -91,8 +91,8 @@ exec_always gsettings set org.gnome.desktop.interface cursor-theme \
 # performing a primary selection paste.
 exec wl-paste -p --watch wl-copy -cp
 
+# sleep in 2 hours and 13 minutes idle.
 # turns off display in 40 minutes idle.
-# take a nap in 2 hours and 13 minutes.
 # resume on mouse and keyboard input.
 exec swayidle -w \
   timeout 8000 'sudo zzz' \
