@@ -64,7 +64,7 @@ M.options = {
     input_builtin_bindings = 'no',
 
     alpha             = 'no',
-    background        = '#fbf6f6',
+    background_color  = '#fbf6f6',
     geometry          = '17%',
     ontop             = 'yes',
     window_dragging   = 'yes',
