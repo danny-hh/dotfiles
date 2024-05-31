@@ -11,19 +11,19 @@ M.keymaps = {
     x = 'add volume 5',
     X = 'add volume -10',
     m = 'cycle mute',
-    c = 'cycle sub',
-    C = 'cycle sub down',
-    v = 'cycle sub visibility',
+    s = 'cycle sub down',
+    S = 'cycle sub visibility',
 
-    h = 'add video-pan-x -0.1',
-    j = 'add video-pan-y  0.1',
-    k = 'add video-pan-y -0.1',
-    l = 'add video-pan-x  0.1',
-    f = 'add video-zoom   0.1',
-    F = 'add video-zoom  -0.1',
-    r = 'set video-zoom   0.01 ; ' ..
-        'set video-pan-x  0 ; ' ..
-        'set video-pan-y  0',
+    h = 'add video-pan-x  -0.01',
+    j = 'add video-pan-y   0.01',
+    k = 'add video-pan-y  -0.01',
+    l = 'add video-pan-x   0.01',
+    f = 'add video-zoom    0.1',
+    F = 'add video-zoom   -0.1',
+    r = 'set video-zoom    0.01 ; ' ..
+        'set video-pan-x   0 ; ' ..
+        'set video-pan-y   0 ; ' ..
+        'set video-rotate  0',
 
     ['/, MBTN_RIGHT'] = 'vf toggle hflip',
     e = 'cycle_values video-rotate 90 180 270 0',

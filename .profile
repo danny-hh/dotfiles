@@ -18,8 +18,7 @@ send() { curl -F "file=@$1" 'https://x0.at' | wl-copy ;}
 pick() { grim -g "$(slurp -p)" -t ppm - |
 convert - -format '%[pixel:p{0,0}]' txt:- ;}
 
-# view full command outputs without having to
-# resize the terminal with a scrollable pager.
+# view full command outputs with no hassle.
 qq()   { eval "$@" | less -R ;}
 
 hh1()  { du -bhd 1 ;}
