@@ -20,11 +20,12 @@
  (meow)
  (multiple-cursors)
  (fontawesome)
- (highlight-indent-guides :config (setq highlight-indent-guides-method 'character
-                                        highlight-indent-guides-auto-enabled nil)
-                            :hook (prog-mode . highlight-indent-guides-mode))
- (rainbow-delimiters        :hook (prog-mode . rainbow-delimiters-mode))
- (rainbow-mode              :hook ((css-mode emacs-lisp-mode) . rainbow-mode)))
+ (lua-mode)
+ (rainbow-delimiters :hook (prog-mode . rainbow-delimiters-mode))
+ (rainbow-mode       :hook ((css-mode lua-mode emacs-lisp-mode) . rainbow-mode))
+ (undo-fu)
+ (undo-fu-session    :after undo-fu
+                     :config (undo-fu-session-global-mode)))
 
 (defun load-user-config (file)
   (load-file (expand-file-name file "~/.config/emacs.d/")))
@@ -33,8 +34,7 @@
                             "el/kb.el"))
 (defun reload ()
   (interactive)
-  (mapc 'load-user-config '("init.el"
-                            "el/fl.el"
+  (mapc 'load-user-config '("el/fl.el"
                             "el/fm.el"
                             "el/kb.el")))
 (setq create-lockfiles nil
@@ -72,7 +72,8 @@
 
 (setq inhibit-startup-screen t
       initial-buffer-choice nil
-      confirm-kill-processes nil)
+      confirm-kill-processes nil
+      confirm-nonexistent-file-or-buffer nil)
 
 (setq default-frame-alist
       '((font . "Iosevka Comfy Medium 10")
@@ -87,8 +88,14 @@
 
 (window-divider-mode 1)
 
-(show-paren-mode 1)
+;; line by line scrolling
+(setq scroll-step 1
+      scroll-margin 5
+      scroll-conservatively 10
+      scroll-preserve-screen-position t)
+
 (global-hl-line-mode)
+(show-paren-mode 1)
 (delete-selection-mode 1)
 
 ;; disable line wrap, prefer spaces over tabs
@@ -105,12 +112,6 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; EWW EEEEEE!!!!!!!!!!!!!!!!!! THATS POOOOPP!!!
-(defun docst()
-  (interactive)
-  (if (eq major-mode 'eww-mode)
-      (org-mode)
-    (eww-mode)))
-
 (defvar url-address
   '(("emacs"      . "http://web.archive.org/web/20070808235903/https://www.gnu.org/software/emacs/")
     ("emacs girl" . "https://4chanarchives.com/board/k/thread/29900098")
@@ -144,23 +145,26 @@
 (defun fudgee-barr ()
   (dolist (window (window-list))
     (with-current-buffer (window-buffer window)
-      (let* ((str-right (format "Ln %d, Col %d    "  ; <-- The reason why we are putting spaces here
-                                (line-number-at-pos) ; is to align the Ln and Col indicator properly.
-                                (current-column)))   ; Font Awesome has unicode icons that makes up
-                                                     ; the extra spaces that don't go along with the
-             (icon (if (eq window (selected-window)) ; ascii code and it messes with the normal alignment.
-                       (propertize "    " 'face 'icon-face)
-                       (propertize "    " 'face 'icon-face-inactive)))
+      (let* ((str-right (format "(%d, %d)    "
+                                (line-number-at-pos)
+                                (current-column)))
 
              (file (if (eq major-mode 'eww-mode)
-                       (let ((url (plist-get eww-data :url)))                    ; It's better to just change the file name
-                         (if url (concat "URL: " url)                            ; to the url address than completely using
-                           "EWW"))                                               ; eww's own header property that replaces
-                     (file-name-nondirectory (or buffer-file-name "Untitled")))) ; the custom header line.
+                       (let ((url (plist-get eww-data :url)))
+                         (if url (concat "URL: " url)
+                           "EWW"))
+                     (file-name-nondirectory (or buffer-file-name "Untitled"))))
+
+             (meow-state (cond ((bound-and-true-p meow-normal-mode) "NORMAL")
+                               ((bound-and-true-p meow-insert-mode) "INSERT")
+                               ((bound-and-true-p meow-motion-mode) "MOTION")
+                               ((bound-and-true-p meow-keypad-mode) "KEYPAD")
+                               ((bound-and-true-p meow-beacon-mode) "BEACON")
+                               (t "OTHERS")))
 
              (str-left  (format " %s [%s] (#%s) (%s%s%s)"
                                 file
-                                (if overwrite-mode "o" "n")
+                                meow-state
                                 (if vc-mode (substring vc-mode 5) "?")
                                 (format-mode-line mode-name)
                                 (if abbrev-mode " ABBREV" "")
@@ -170,6 +174,10 @@
                                     (length str-left)
                                     (length str-right) 0)))
 
+             (icon (if (eq window (selected-window))
+                       (propertize "    " 'face 'icon-face)
+                       (propertize "    " 'face 'icon-face-inactive)))
+
              (face (if (eq window (selected-window))
                        'mode-line
                        'mode-line-inactive))
@@ -177,11 +185,11 @@
              (str-left-p  (propertize str-left 'face face))
              (str-right-p (propertize str-right 'face face))
              (str-cents-p (propertize (make-string fill-length ?\s) 'face face))
-                          (x (concat icon
-                               str-left-p
-                               str-cents-p
-                               str-right-p)))
-        (setq-local header-line-format x)))))
+             (x (concat icon
+                        str-left-p
+                        str-cents-p
+                        str-right-p)))
+            (setq-local header-line-format x)))))
 
 (add-hook 'window-configuration-change-hook 'fudgee-barr)
 (add-hook 'post-command-hook 'fudgee-barr)
