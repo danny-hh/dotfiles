@@ -1,7 +1,6 @@
 ;;; init.el -*- lexical-binding: t -*-
 ;;; Commentary: my lisp machine configuration.
 
-(require 'package)
 (add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
@@ -17,39 +16,43 @@
                      `(use-package ,(car pkg) ,@(cdr pkg)
                         :ensure t))) packages)))
 (install-packages
- (meow)
  (multiple-cursors)
  (fontawesome)
  (lua-mode)
  (rainbow-delimiters :hook (prog-mode . rainbow-delimiters-mode))
- (rainbow-mode       :hook ((css-mode lua-mode emacs-lisp-mode) . rainbow-mode))
+ (rainbow-mode       :hook ((css-mode
+                             lua-mode
+                             emacs-lisp-mode) . rainbow-mode))
+ (smartparens        :hook ((prog-mode . smartparens-mode)
+                            (lisp-mode . smartparens-strict-mode)))
  (undo-fu)
  (undo-fu-session    :after undo-fu
                      :config (undo-fu-session-global-mode)))
 
-(defun load-user-config (file)
-  (load-file (expand-file-name file "~/.config/emacs.d/")))
-  (mapc 'load-user-config '("el/fl.el"
-                            "el/fm.el"
-                            "el/kb.el"))
 (defun reload ()
   (interactive)
-  (mapc 'load-user-config '("el/fl.el"
-                            "el/fm.el"
-                            "el/kb.el")))
-(setq create-lockfiles nil
+  (let ((config-dir (expand-file-name "el/" user-emacs-directory)))
+    (mapc (lambda (file)
+            (let ((file-path (expand-file-name file config-dir)))
+              (when (file-readable-p file-path)
+                          (load-file file-path)))) '("fl.el"
+                                                     "fm.el"
+                                                     "kb.el")))) (reload)
+(defun export ()
+  (interactive)
+  (if-let ((file buffer-file-name))
+      (let* ((backup-dir  (expand-file-name "backups/" user-emacs-directory))
+             (backup-name (read-string      "file-name: " (file-name-nondirectory file)))
+             (backup-path (expand-file-name  backup-name backup-dir)))
+        (make-directory backup-dir t)
+        (copy-file file backup-path t)
+        (message "file exported to %s" backup-path))
+    (message "buffer is not associated with a file")))
+
+(setq make-backup-files nil
+      create-lockfiles nil
       auto-save-default nil
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
-(setq version-control t
-      kept-new-versions 10
-      kept-old-versions 0
-      delete-old-versions t)
-
-(let ((backup-dir (expand-file-name (concat user-emacs-directory "backups/"))))
-  (if (not (file-exists-p backup-dir))
-      (make-directory backup-dir t))
-  (setq backup-directory-alist `(("." . ,backup-dir))))
 
 (prefer-coding-system 'utf-8)
 
@@ -67,13 +70,18 @@
   (let ((user-name (getenv "USER")))
     (message "hi %s, happy hacking!" user-name)))
 
-;; yes, no -> y, n
-(setq use-short-answers t)
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 (setq inhibit-startup-screen t
       initial-buffer-choice nil
       confirm-kill-processes nil
       confirm-nonexistent-file-or-buffer nil)
+
+;; line by line scrolling
+(setq scroll-step 1
+      scroll-margin 5
+      scroll-conservatively 10
+      scroll-preserve-screen-position t)
 
 (setq default-frame-alist
       '((font . "Iosevka Comfy Medium 10")
@@ -87,26 +95,18 @@
         (window-divider-default-places . right-only)))
 
 (window-divider-mode 1)
-
-;; line by line scrolling
-(setq scroll-step 1
-      scroll-margin 5
-      scroll-conservatively 10
-      scroll-preserve-screen-position t)
-
-(global-hl-line-mode)
+(global-hl-line-mode 1)
+(blink-cursor-mode 0)
 (show-paren-mode 1)
 (delete-selection-mode 1)
 
 ;; disable line wrap, prefer spaces over tabs
-(setq fill-column 120
-      tab-width 4)
-
 (setq-default truncate-lines t
               indent-tabs-mode nil)
 
 ;; remove dollar sign at the end of truncated lines
 (set-display-table-slot standard-display-table 0 ?\ )
+(setq tab-width 4)
 
 ;; trim trailing whitespaces on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -115,7 +115,7 @@
 (defvar url-address
   '(("emacs"      . "http://web.archive.org/web/20070808235903/https://www.gnu.org/software/emacs/")
     ("emacs girl" . "https://4chanarchives.com/board/k/thread/29900098")
-    ("t"          . "https://boards.4chan.org/g/")
+    ("g"          . "https://boards.4chan.org/g/")
     ("fa"         . "https://boards.4chan.org/fa/")
     ("his"        . "https://boards.4chan.org/his/")
     ("furret"     . "https://e621.net/posts?page=4&tags=ke_mo_suke")))
@@ -127,7 +127,7 @@
       (erase-buffer)
       (insert "\nyou're fucking gay \n\n")
       (let ((max-title-length (apply 'max (mapcar #'length
-                                          (mapcar #'car url-address)))))
+                                                  (mapcar #'car url-address)))))
         (dolist (item url-address)
           (let ((url-title (car item))
                 (url       (cdr item)))
@@ -149,38 +149,32 @@
                                 (line-number-at-pos)
                                 (current-column)))
 
-             (file (if (eq major-mode 'eww-mode)
-                       (let ((url (plist-get eww-data :url)))
-                         (if url (concat "URL: " url)
-                           "EWW"))
-                     (file-name-nondirectory (or buffer-file-name "Untitled"))))
+             (file-name (if (eq major-mode 'eww-mode)
+                            (let ((url (plist-get eww-data :url)))
+                               (if url (concat "URL: " url)
+                                 "EWW"))
+                            (file-name-nondirectory
+                               (or buffer-file-name "Untitled"))))
 
-             (meow-state (cond ((bound-and-true-p meow-normal-mode) "NORMAL")
-                               ((bound-and-true-p meow-insert-mode) "INSERT")
-                               ((bound-and-true-p meow-motion-mode) "MOTION")
-                               ((bound-and-true-p meow-keypad-mode) "KEYPAD")
-                               ((bound-and-true-p meow-beacon-mode) "BEACON")
-                               (t "OTHERS")))
-
-             (str-left  (format " %s [%s] (#%s) (%s%s%s)"
-                                file
-                                meow-state
-                                (if vc-mode (substring vc-mode 5) "?")
-                                (format-mode-line mode-name)
-                                (if abbrev-mode " ABBREV" "")
-                                (if eldoc-mode " ELDOC" "")))
+             (str-left (format " %s [%s] (#%s) (%s%s%s)"
+                               file-name
+                               (if (boundp 'edit-state) edit-state "OTHERS")
+                               (if vc-mode (substring vc-mode 5) "?")
+                               (format-mode-line mode-name)
+                               (if abbrev-mode " ABBREV" "")
+                               (if eldoc-mode " ELDOC" "")))
 
              (fill-length (max 0 (- (window-width window)
                                     (length str-left)
                                     (length str-right) 0)))
 
-             (icon (if (eq window (selected-window))
-                       (propertize "    " 'face 'icon-face)
-                       (propertize "    " 'face 'icon-face-inactive)))
-
              (face (if (eq window (selected-window))
                        'mode-line
                        'mode-line-inactive))
+
+             (icon (if (eq window (selected-window))
+                       (propertize "    " 'face 'icon-face)
+                       (propertize "    " 'face 'icon-face-inactive)))
 
              (str-left-p  (propertize str-left 'face face))
              (str-right-p (propertize str-right 'face face))
