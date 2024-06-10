@@ -1,8 +1,14 @@
 ;;; init.el -*- lexical-binding: t -*-
 ;;; Commentary: my lisp machine configuration.
 
-(add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; C:\Users\User\AppData\Roaming\.emacs.d
+;; $HOME/.emacs.d (not when --init-directory is set)
+(setq default-directory user-emacs-directory)
+
+(setq package-enable-at-startup nil)
+(setq package-archives
+      '(("elpa"  . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)

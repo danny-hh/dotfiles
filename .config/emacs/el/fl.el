@@ -10,35 +10,48 @@
 ;; 2. list present faces in current buffer
 ;;      M-x list-faces-display RET
 ;;
-;;   ,-_,.
-;; ,( _  ))
-;; 7 (_) 77
-;; ((   :))
-;;  ~__>~'
-;;   cY?'
-;;   `l,__
-;;    l7-'
-;;   ;l
-;;   _i_,
-;;  l___l
-;;  \___/ fl.el (flowershop by irhl)
+;;       ,-_,.
+;;     ,( _  ))
+;;     7 (_) 77
+;;     ((   :))
+;;      ~__>~'
+;;       cY?'
+;;       `l,__
+;;        l7-'
+;;       ;l
+;;       _i_,
+;;      l___l
+;;      \___/ fl.el (flowershop by irhl)
 
 (unless (>= emacs-major-version 29)
   (error
     "hola payaso fuck you no fudgee barr for you"))
 
-(defvar ext '(emacs-lisp-mode c-mode sh-mode bash-mode))
-(dolist (mode ext)
-  (font-lock-add-keywords
-   mode
-   '(("\\_<\\([+-]?[0-9]+\\.?[0-9]*\\)\\_>" 1
-      '(face (:foreground "#ebaed4")))
+(defmacro ext (modes &rest customizations)
+  `(dolist (mode ,modes)
+     (font-lock-add-keywords
+      mode
+      (append '(,@customizations)
+              (mapcar (lambda (substitution)
+                        `(,(car substitution)
+                          (0 (progn
+                               (put-text-property
+                               (match-beginning 0)
+                               (match-end 0)
+                               'display ,
+                               (cadr substitution))))))
+                      ',customizations)))))
+(ext
+ '(emacs-lisp-mode c-mode lua-mode sh-mode bash-mode)
 
-     ("\\<lambda\\>"
-      (0 (progn
-           (compose-region (match-beginning 0) (match-end 0)
-                           (make-char 'greek-iso8859-7 107))
-           nil))))))
+ ("\\<lambda\\>"      "λ")
+ ("\\<interactive\\>"      "+")
+ ("\\<defun\\>"     "fn")
+ ("\\<defmacro\\>"  "macro")
+ ("\\<defvar\\>" "var")
+
+ ("\\_<\\([+-]?[0-9]+\\.?[0-9]*\\)\\_>"
+  1 '(face (:foreground "#ebaed4"))))
 
 (defface icon-face
   '((t (:family "FontAwesome"
@@ -66,10 +79,10 @@
  '(rainbow-delimiters-depth-3-face  ((t (:foreground "#84badd"))))
  '(rainbow-delimiters-depth-4-face  ((t (:foreground "#e889c6"))))
  '(rainbow-delimiters-depth-5-face  ((t (:foreground "#6ebb77"))))
- '(rainbow-delimiters-depth-6-face  ((t (:foreground "#c79d83"))))
- '(rainbow-delimiters-depth-7-face  ((t (:foreground "#c79d83"))))
- '(rainbow-delimiters-depth-8-face  ((t (:foreground "#c79d83"))))
- '(rainbow-delimiters-depth-9-face  ((t (:foreground "#c79d83"))))
+ '(rainbow-delimiters-depth-6-face  ((t (:foreground "#ebc3a9"))))
+ '(rainbow-delimiters-depth-7-face  ((t (:foreground "#a99de0"))))
+ '(rainbow-delimiters-depth-8-face  ((t (:foreground "#83cbb6"))))
+ '(rainbow-delimiters-depth-9-face  ((t (:foreground "#e9a498"))))
  '(rainbow-delimiters-depth-10-face ((t (:foreground "#c79d83"))))
  '(rainbow-delimiters-depth-11-face ((t (:foreground "#c79d83"))))
  '(rainbow-delimiters-depth-12-face ((t (:foreground "#c79d83"))))
@@ -143,8 +156,8 @@
  '(header-line
    ((t :weight bold
         :box (:color "#fcf5ee"
-             :line-width 2
-             :style nil))))
+              :line-width 2
+              :style nil))))
 
  '(mode-line
    ((t :weight bold
@@ -161,8 +174,8 @@
         :background  "#f0e8e2"
         :overline    "#f0e8e2"
         :box (:color "#f0e8e2"
-             :line-width 2
-             :style nil))))
+              :line-width 2
+              :style nil))))
 
  '(header-line-highlight
    ((t :box (:color nil))))
