@@ -44,10 +44,10 @@
 (ext
  '(emacs-lisp-mode c-mode lua-mode sh-mode bash-mode)
 
- ("\\<lambda\\>"      "λ")
- ("\\<interactive\\>"      "+")
- ("\\<defun\\>"     "fn")
- ("\\<defmacro\\>"  "macro")
+ ("\\<lambda\\>" "λ")
+ ("\\<interactive\\>" "+")
+ ("\\<defun\\>" "fn")
+ ("\\<defmacro\\>" "macro")
  ("\\<defvar\\>" "var")
 
  ("\\_<\\([+-]?[0-9]+\\.?[0-9]*\\)\\_>"
