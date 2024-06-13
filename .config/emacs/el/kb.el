@@ -19,7 +19,14 @@
       (isearch-repeat-forward)
     (isearch-forward)))
 
-(defun kill-line-saw ()
+(defun pull-line ()
+  (interactive)
+  (delete-horizontal-space)
+  (delete-blank-lines)
+  (insert " ")
+  (backward-char))
+
+(defun kill-line-alt ()
   (interactive)
   (if (region-active-p)
       (kill-region (region-beginning) (region-end))
@@ -63,9 +70,13 @@
 (defvar map-normal (make-sparse-keymap))
 (defvar map-insert (make-sparse-keymap))
 
+(setq eww-mode-map map-normal)
+(setq eww-link-keymap map-normal)
+
 (defun switch-to-insert-mode ()
   (interactive)
-  (if buffer-read-only
+  (if (and buffer-read-only
+           (not (eq major-mode 'eww-mode)))
       (message "Error: buffer is read-only.")
     (use-local-map map-insert)
     (setq edit-state 'INSERT)
@@ -73,7 +84,8 @@
 
 (defun switch-to-normal-mode ()
   (interactive)
-  (unless buffer-read-only
+  (when (or (eq major-mode 'eww-mode)
+            (not buffer-read-only))
     (use-local-map map-normal)
     (setq edit-state 'NORMAL)
     (setq-local cursor-type 'box)))
@@ -101,45 +113,59 @@
      (define-key (pcase ,mode
                     (:normal map-normal)
                     (:insert map-insert)
-                    (:any    global-map))
-
+                    (:any    global-map)
+                    (:dired  dired-mode-map))
        (kbd (car binding)) (cdr binding))))
 
 (kb :normal
-    ("a" . switch-to-insert-mode)
-    ("w" . move-beginning-of-line)
+    ("f" . forward-word)
+    ("b" . backward-word)
+    ("F" . forward-sentence)
+    ("B" . backward-sentence)
     ("e" . move-end-of-line)
+    ("E" . move-beginning-of-line)
     ("g" . beginning-of-buffer)
     ("G" . end-of-buffer)
+    ("j" . pull-line)
     ("D" . open-line)
-    ("d" . kill-line-saw)
+    ("d" . kill-line-alt)
     ("V" . kill-ring-save)
-    ("v" . set-mark-command))
+    ("v" . set-mark-command)
+    ("a" . switch-to-insert-mode))
+
+(with-eval-after-load 'eww
+  (kb :normal
+      ("C-h b"    . eww-back-url)
+      ("C-h r"    . eww-reload)
+      ("<return>" . eww-follow-link)))
+
+;; depends on: https://github.com/jcfk/dired-nnn
+(with-eval-after-load 'dired
+  (kb :dired
+      ("SPC" . dired-nnn-toggle-mark)
+      ("a"   . dired-mark-subdir-files)
+      ("A"   . dired-toggle-marks)
+      ("p"   . dired-nnn-paste)
+      ("v"   . dired-nnn-move)))
 
 (kb :any
     ("<tab>"     . abort)
     ("<escape>"  . abort)
-
+    ("~"         . repeat)
+    ("M-x"       . execute-extended-command)
     ("C-s"       . incremental-search)
     ("C-z"       . undo-only)
     ("C-S-z"     . undo-redo)
     ("C-S-v"     . clipboard-yank)
-
-    ("C-c b"     . eww-back-url)
-    ("C-c k"     . describe-key)
-    ("C-x C-f"   . find-file)
+    ("C-h c"     . describe-char)
+    ("C-h k"     . describe-key)
+    ("C-x f"     . find-file)
     ("C-x b"     . ibuffer)
     ("C-x k"     . kill-buffer)
     ("C-x 0"     . delete-window)
     ("C-x 1"     . delete-other-windows)
     ("C-x 2"     . split-window-below)
     ("C-x 3"     . split-window-right)
-
-    ("M-x"       . execute-extended-command)
-    ("M-f"       . forward-word)
-    ("M-b"       . backward-word)
-    ("M-e"       . forward-sentence)
-    ("M-a"       . backward-sentence)
 
     ("<M-up>"    . windmove-up)
     ("<M-down>"  . windmove-down)
@@ -156,8 +182,3 @@
     ("<M-next>"  . mc/unmark-next-like-this)
     ("<S-prior>" . mc/mark-previous-like-this)
     ("<S-next>"  . mc/mark-next-like-this))
-
-(with-eval-after-load 'eww
-  (kb :any
-      ("C-h b" . eww-back-url)
-      ("C-h r" . eww-reload)))

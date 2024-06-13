@@ -43,7 +43,8 @@
               (when (file-readable-p file-path)
                           (load-file file-path)))) '("fl.el"
                                                      "fm.el"
-                                                     "kb.el")))) (reload)
+                                                     "kb.el"
+                                                     "dired-nnn.el")))) (reload)
 (defun export ()
   (interactive)
   (if-let ((file buffer-file-name))
@@ -61,15 +62,6 @@
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 (prefer-coding-system 'utf-8)
-
-;; assign clipboard
-(defun wl-copy (text)
-  (let ((p (make-process :name "wl-copy"
-                         :command '("wl-copy")
-                         :connection-type 'pipe)))
-    (process-send-string p text)
-    (process-send-eof p)))
-(setq interprogram-cut-function 'wl-copy)
 
 ;; editor greetings
 (defun display-startup-echo-area-message ()

@@ -124,6 +124,22 @@
  ;; SECTION: menu
  '(minibuffer-prompt                ((t (:foreground "#9a9392"))))
 
+ ;; SECIION: org mode
+ '(org-level-1          ((t (:height 1.5 :weight bold))))
+ '(org-level-2          ((t (:height 1.4 :weight bold))))
+ '(org-level-3          ((t (:height 1.3 :weight bold))))
+ '(org-level-4          ((t (:height 1.2 :weight bold))))
+ '(org-level-5          ((t (:height 1.1 :weight bold))))
+ '(org-level-6          ((t (:height 1.0 :weight bold))))
+ '(org-level-7          ((t (:height 1.0 :weight bold))))
+ '(org-level-8          ((t (:height 1.0 :weight bold))))
+ '(org-document-title   ((t (:weight bold :height 1.5))))
+
+ '(org-meta-line         ((t (:foreground "#d2cbc6" :background "#f4ede6" ))))
+ '(org-block-begin-line  ((t (:foreground "#d2cbc6" :background "#f4ede6" ))))
+ '(org-block             ((t (:background "#f8f1ea" ))))
+ '(org-table             ((t (:foreground "#c9c6c3" ))))
+
  ;; SECTION: webpages
  '(highlight                        ((t (:foreground "#f5cac3"))))
  '(browse-url-button                ((t (:foreground "#d3c2bb"))))
