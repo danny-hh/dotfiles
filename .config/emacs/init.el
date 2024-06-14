@@ -45,6 +45,9 @@
                                                      "fm.el"
                                                      "kb.el"
                                                      "dired-nnn.el")))) (reload)
+;; prevent init.el from creating additional custom face properties
+(setq custom-file (concat user-emacs-directory "el/fl.el"))
+
 (defun export ()
   (interactive)
   (if-let ((file buffer-file-name))
