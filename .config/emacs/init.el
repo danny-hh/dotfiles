@@ -1,15 +1,38 @@
 ;;; init.el -*- lexical-binding: t -*-
-;;; Commentary: my lisp machine configuration.
+;;; Commentary: my lisp machine conf
+
+(defun report()
+  (interactive)
+  (let* ((buffers (seq-filter
+                    (lambda (name) (not (string-match "^ " name)))
+                    (mapcar 'buffer-name (buffer-list))))
+         (buffer (ido-completing-read "buffer: " buffers)))
+    (save-excursion
+      (with-current-buffer buffer
+        (clipboard-kill-ring-save (point-min) (point-max))
+        (message "y+ %s" buffer)))))
 
 ;; C:\Users\User\AppData\Roaming\.emacs.d
-;; $HOME/.emacs.d (not when --init-directory is set)
-(setq default-directory user-emacs-directory)
+;; $HOME/.emacs.d
+(setq default-directory user-emacs-directory
+      custom-file "/dev/null") ; tu puta madre
 
+(defun reload ()
+  (interactive)
+  (let ((config-dir (expand-file-name "el/" user-emacs-directory)))
+    (mapc (lambda (file)
+            (let ((file-path (expand-file-name file config-dir)))
+              (when (file-readable-p file-path)
+                          (load-file file-path)))) '("fl.el"
+                                                     "fm.el"
+                                                     "kb.el"
+                                                     "dired-nnn.el"))))
+;; require 'package is automatically called by use-package
+;; package initialize isn't needed over v27
 (setq package-enable-at-startup nil)
 (setq package-archives
       '(("elpa"  . "https://elpa.gnu.org/packages/")
         ("melpa" . "https://melpa.org/packages/")))
-(package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -20,7 +43,10 @@
      ,@(mapcar (lambda (pkg)
                  (if (consp pkg)
                      `(use-package ,(car pkg) ,@(cdr pkg)
-                        :ensure t))) packages)))
+                        :ensure t))) packages)
+     ;; load files after checking packages
+     (reload)))
+
 (install-packages
  (multiple-cursors)
  (fontawesome)
@@ -35,18 +61,11 @@
  (undo-fu-session    :after undo-fu
                      :config (undo-fu-session-global-mode)))
 
-(defun reload ()
-  (interactive)
-  (let ((config-dir (expand-file-name "el/" user-emacs-directory)))
-    (mapc (lambda (file)
-            (let ((file-path (expand-file-name file config-dir)))
-              (when (file-readable-p file-path)
-                          (load-file file-path)))) '("fl.el"
-                                                     "fm.el"
-                                                     "kb.el"
-                                                     "dired-nnn.el")))) (reload)
-;; prevent init.el from creating additional custom face properties
-(setq custom-file (concat user-emacs-directory "el/fl.el"))
+;; conf downtown
+(setq make-backup-files nil
+      create-lockfiles nil
+      auto-save-default nil
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 (defun export ()
   (interactive)
@@ -59,19 +78,13 @@
         (message "file exported to %s" backup-path))
     (message "buffer is not associated with a file")))
 
-(setq make-backup-files nil
-      create-lockfiles nil
-      auto-save-default nil
-      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
 (prefer-coding-system 'utf-8)
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; editor greetings
 (defun display-startup-echo-area-message ()
   (let ((user-name (getenv "USER")))
     (message "hi %s, happy hacking!" user-name)))
-
-(defalias 'yes-or-no-p 'y-or-n-p)
 
 (setq inhibit-startup-screen t
       initial-buffer-choice nil
@@ -101,7 +114,6 @@
 (show-paren-mode 1)
 (delete-selection-mode 1)
 
-;; disable line wrap, prefer spaces over tabs
 (setq-default truncate-lines t
               indent-tabs-mode nil)
 
@@ -112,7 +124,6 @@
 ;; trim trailing whitespaces on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; EWW EEEEEE!!!!!!!!!!!!!!!!!! THATS POOOOPP!!!
 (defvar url-address
   '(("emacs"      . "http://web.archive.org/web/20070808235903/https://www.gnu.org/software/emacs/")
     ("emacs girl" . "https://4chanarchives.com/board/k/thread/29900098")
@@ -128,7 +139,7 @@
       (erase-buffer)
       (insert "\nyou're fucking gay \n\n")
       (let ((max-title-length (apply 'max (mapcar #'length
-                                                  (mapcar #'car url-address)))))
+                                          (mapcar #'car url-address)))))
         (dolist (item url-address)
           (let ((url-title (car item))
                 (url       (cdr item)))
@@ -146,7 +157,7 @@
 (defun fudgee-barr ()
   (dolist (window (window-list))
     (with-current-buffer (window-buffer window)
-      (let* ((str-right (format "(%d, %d)    "
+      (let* ((str-right (format "Ln %d, Col %d    "
                                 (line-number-at-pos)
                                 (current-column)))
 
