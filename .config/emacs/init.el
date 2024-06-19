@@ -48,13 +48,15 @@
      (reload)))
 
 (install-packages
- (multiple-cursors)
  (fontawesome)
+ (svg-lib)
+ (svg-tag-mode)
  (lua-mode)
  (rainbow-delimiters :hook (prog-mode . rainbow-delimiters-mode))
  (rainbow-mode       :hook ((css-mode
                              lua-mode
                              emacs-lisp-mode) . rainbow-mode))
+ (multiple-cursors)
  (smartparens        :hook ((prog-mode . smartparens-mode)
                             (lisp-mode . smartparens-strict-mode)))
  (undo-fu)
@@ -114,6 +116,9 @@
 (show-paren-mode 1)
 (delete-selection-mode 1)
 
+;; hide cursor on inactive windows
+(setq-default cursor-in-non-selected-windows nil)
+
 (setq-default truncate-lines t
               indent-tabs-mode nil)
 
@@ -124,6 +129,25 @@
 ;; trim trailing whitespaces on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; org-mode stuff
+(setq org-fontify-whole-block-delimiter-line t
+      org-fontify-whole-heading-line t
+      org-fontify-todo-headline t
+      org-fontify-done-headline t
+      org-cycle-level-faces nil
+      org-adapt-indentation nil)
+
+(setq svg-tag-tags
+  '(("|[0-9a-zA-Z- ]+?|" . ((lambda (tag) (svg-tag-make tag
+                                      :face 'font-lock-comment-face
+                                      :font-family "Iosevka Comfy Medium"
+                                      :font-size 9
+                                      :radius 0
+                                      :beg 1 :end -1))))))
+
+(add-hook 'org-mode-hook 'svg-tag-mode 1)
+
+;; eww stuff
 (defvar url-address
   '(("emacs"      . "http://web.archive.org/web/20070808235903/https://www.gnu.org/software/emacs/")
     ("emacs girl" . "https://4chanarchives.com/board/k/thread/29900098")
