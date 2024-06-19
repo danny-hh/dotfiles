@@ -90,34 +90,33 @@
  '(rainbow-delimiters-depth-12-face   ((t (:foreground "#c79d83"))))
  '(rainbow-delimiters-base-error-face ((t (:foreground "#e27294"))))
 
- '(font-lock-builtin-face           ((t (:foreground "#918b8b"))))
- '(font-lock-comment-face           ((t (:foreground "#d2cbc6"))))
- '(font-lock-comment-delimiter-face ((t (:foreground "#d2cbc6"))))
- '(font-lock-doc-face               ((t (:foreground "#d2cbc6"))))
- '(font-lock-constant-face          ((t (:foreground "#9cd2bb"))))
- '(font-lock-function-name-face     ((t (:foreground "#bea292"))))
- '(font-lock-keyword-face           ((t (:foreground "#cfbbb0"))))
- '(font-lock-doc-string-face        ((t (:foreground "#d2cbc6"))))
- '(font-lock-string-face            ((t (:foreground "#5e5958"))))
- '(font-lock-type-face              ((t (:foreground "#5e5958"))))
- '(font-lock-variable-name-face     ((t (:foreground "#b3a7a9"))))
- '(font-lock-preprocessor           ((t (:foreground "#b3a7a9"))))
- '(font-lock-warning-face           ((t (:foreground "#5e5958"))))
-
- '(vertical-border                  ((t (:foreground "#f3ebeb"))))
- '(window-divider                   ((t (:foreground "#f5efe8"))))
- '(window-divider-first-pixel       ((t (:foreground "#f5efe8"))))
- '(window-divider-last-pixel        ((t (:foreground "#f5efe8"))))
+ '(font-lock-builtin-face             ((t (:foreground "#918b8b"))))
+ '(font-lock-comment-face             ((t (:foreground "#d2cbc6"))))
+ '(font-lock-comment-delimiter-face   ((t (:foreground "#d2cbc6"))))
+ '(font-lock-doc-face                 ((t (:foreground "#d2cbc6"))))
+ '(font-lock-constant-face            ((t (:foreground "#9cd2bb"))))
+ '(font-lock-function-name-face       ((t (:foreground "#bea292"))))
+ '(font-lock-keyword-face             ((t (:foreground "#cfbbb0"))))
+ '(font-lock-doc-string-face          ((t (:foreground "#d2cbc6"))))
+ '(font-lock-string-face              ((t (:foreground "#5e5958"))))
+ '(font-lock-type-face                ((t (:foreground "#5e5958"))))
+ '(font-lock-variable-name-face       ((t (:foreground "#b3a7a9"))))
+ '(font-lock-preprocessor             ((t (:foreground "#b3a7a9"))))
+ '(font-lock-warning-face             ((t (:foreground "#5e5958"))))
+ '(vertical-border                    ((t (:foreground "#f3ebeb"))))
+ '(window-divider                     ((t (:foreground "#f5efe8"))))
+ '(window-divider-first-pixel         ((t (:foreground "#f5efe8"))))
+ '(window-divider-last-pixel          ((t (:foreground "#f5efe8"))))
 
  ;; SECTION: menu
- '(minibuffer-prompt                ((t (:foreground "#9a9392"))))
- '(help-key-binding                 ((t (:foreground "#d2cbc6"))))
+ '(minibuffer-prompt                  ((t (:foreground "#9a9392"))))
+ '(help-key-binding                   ((t (:foreground "#d2cbc6"))))
 
  ;; SECTION: functional
- '(hl-line                          ((t (:background "#f5efe8"))))
- '(region                           ((t (:background "#dcd6d3"))))
- '(show-paren-match                 ((t (:background "#f5cac3"))))
- '(show-paren-mismatch              ((t (:background "#c6def4"))))
+ '(hl-line                            ((t (:background "#f5efe8"))))
+ '(region                             ((t (:background "#dcd6d3"))))
+ '(show-paren-match                   ((t (:background "#f5cac3"))))
+ '(show-paren-mismatch                ((t (:background "#c6def4"))))
 
  '(isearch
    ((t (:foreground "#faefea"
@@ -202,44 +201,44 @@
         :inherit bold))))
 
  ;; SECIION: org-mode
-'(org-level-1        ((t (:height 1.5 :weight bold))))
-'(org-level-2        ((t (:height 1.4 :weight bold))))
-'(org-level-3        ((t (:height 1.3 :weight bold))))
-'(org-level-4        ((t (:height 1.2 :weight bold))))
-'(org-level-5        ((t (:height 1.1 :weight bold))))
-'(org-level-6        ((t (:height 1.0 :weight bold))))
-'(org-document-title ((t (:height 1.4 :weight bold))))
+ '(org-level-1        ((t (:height 1.5 :weight bold))))
+ '(org-level-2        ((t (:height 1.4 :weight bold))))
+ '(org-level-3        ((t (:height 1.3 :weight bold))))
+ '(org-level-4        ((t (:height 1.2 :weight bold))))
+ '(org-level-5        ((t (:height 1.1 :weight bold))))
+ '(org-level-6        ((t (:height 1.0 :weight bold))))
+ '(org-document-title ((t (:height 1.4 :weight bold))))
 
-'(org-todo
-  ((t (:foreground "#e9c8c3"
-       :weight bold
-       :family "Comic Code Medium"))))
+ '(org-todo
+   ((t (:foreground "#e9c8c3"
+        :weight bold
+        :family "Comic Code Medium"))))
 
-'(org-headline-todo
-  ((t (:height 0.9
-       :foreground "#918b8b"
-       :weight bold))))
+ '(org-headline-todo
+   ((t (:height 0.9
+        :foreground "#918b8b"
+        :weight bold))))
 
-'(org-meta-line
-  ((t (:foreground "#d2cbc6"
-       :background "#f4ede6" ))))
+ '(org-meta-line
+   ((t (:foreground "#d2cbc6"
+        :background "#f4ede6" ))))
 
-'(org-block-begin-line
-  ((t (:foreground "#d2cbc6"
-       :background "#f4ede6"
-       :extend t ))))
+ '(org-block-begin-line
+   ((t (:foreground "#d2cbc6"
+        :background "#f4ede6"
+        :extend t ))))
 
-;'(org-block-begin-line
-;  ((t (:foreground "#f8f1ea"
-;       :background "#f8f1ea"
-;       :extend t ))))
+ ;'(org-block-begin-line
+ ;  ((t (:foreground "#f8f1ea"
+ ;       :background "#f8f1ea"
+ ;       :extend t ))))
 
-'(org-block ((t (:background "#f8f1ea" ))))
-'(org-table ((t (:foreground "#c9c6c3" ))))
-'(org-date  ((t (:foreground "#ccbfc2"
-                 :underline nil))))
+ '(org-block ((t (:background "#f8f1ea" ))))
+ '(org-table ((t (:foreground "#c9c6c3" ))))
+ '(org-date  ((t (:foreground "#ccbfc2"
+                  :underline nil))))
 
-  ;; SECTION: fudgee barr
+ ;; SECTION: fudgee barr
  '(header-line
    ((t :weight bold
        :box (:color "#fcf5ee"
