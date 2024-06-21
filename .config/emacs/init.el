@@ -74,7 +74,7 @@
 (defun export ()
   (interactive)
   (if-let ((file buffer-file-name))
-      (let* ((backup-dir  (expand-file-name "backups/" user-emacs-directory))
+      (let* ((backup-dir  (expand-file-name "hist-back/" user-emacs-directory))
              (backup-name (read-string      "file-name: " (file-name-nondirectory file)))
              (backup-path (expand-file-name  backup-name backup-dir)))
         (make-directory backup-dir t)
