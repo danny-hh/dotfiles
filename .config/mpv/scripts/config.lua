@@ -64,7 +64,7 @@ M.options = {
     input_builtin_bindings = 'no',
 
     alpha             = 'no',
-    background_color  = '#fbf6f6',
+    background_color  = '#fcf5ee',
     geometry          = '17%',
     ontop             = 'yes',
     window_dragging   = 'yes',
@@ -75,7 +75,7 @@ M.options = {
     osd_align_y       = 'top',
 
     sub_font          = 'Maple Mono',
-    sub_color         = '#fbf6f6',
+    sub_color         = '#fcf5ee',
     sub_shadow_offset = '2',
     sub_shadow_color  = '#5b5958',
     sub_border_size   = '0',

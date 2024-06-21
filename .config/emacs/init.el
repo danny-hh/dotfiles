@@ -61,13 +61,15 @@
                             (lisp-mode . smartparens-strict-mode)))
  (undo-fu)
  (undo-fu-session    :after undo-fu
-                     :config (undo-fu-session-global-mode)))
-
+                     :config (setq undo-fu-session-directory (expand-file-name "hist-undo" user-emacs-directory))
+                             (setq undo-fu-session-file-limit nil)
+                             (setq undo-fu-session-linear t)
+                             (undo-fu-session-global-mode)))
 ;; conf downtown
 (setq make-backup-files nil
       create-lockfiles nil
       auto-save-default nil
-      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+      auto-save-list-file-prefix nil)
 
 (defun export ()
   (interactive)
