@@ -1,0 +1,9 @@
+#!/bin/sh
+
+wf-recorder \
+    -c libx264rgb \
+    -p "preset=veryslow" \
+    -p "crf=0" \
+    -a "alsa_input.pci-0000_27_00.4.analog-stereo" \
+    -f "$HOME/oo.mp4"
+
