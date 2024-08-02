@@ -5,13 +5,15 @@ local mp = require 'mp'
 local config = require('config')
 
 for pattern, action in pairs(config.keymaps) do
-    for k in pattern:gmatch('[^,]+') do
-        local opt = k:match('[left|right|zZxXfF]')
-        and { "repeatable" } or {}
+    local function keymatch(k)
+        return k:match('[left|right|zZxXfF|hjkl]') and "repeatable" or nil
+    end
 
-        mp.add_forced_key_binding(k, function()
-            mp.command(action)
-        end, unpack(opt))
+    for k in pattern:gmatch('[^,]+') do
+        local function action_handle()
+            (type(action) == "function" and action or function() mp.command(action) end)()
+        end
+        mp.add_forced_key_binding(k, action_handle, keymatch(k))
     end
 end
 

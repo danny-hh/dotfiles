@@ -29,14 +29,12 @@
                         `(,(car substitution)
                           (0 (progn
                                (put-text-property
-                               (match-beginning 0)
-                               (match-end 0)
-                               'display ,
-                               (cadr substitution))))))
+                               (match-beginning 0) (match-end 0)
+                               'display , (cadr substitution))))))
                       ',customizations)))))
 (ext
  '(org-mode emacs-lisp-mode
-   c-mode lua-mode sh-mode bash-mode)
+   c-mode lua-mode sh-mode bash-mode ahk-mode powershell)
 
  ("\\<lambda\\>" "λ")
  ("\\<interactive\\>" "+")
@@ -45,35 +43,18 @@
  ("\\<defvar\\>" "var")
 
  ("\\_<\\([+-]?[0-9]+\\.?[0-9]*\\)\\_>"
-  1 '(face (:foreground "#ebaed4"))))
+  1 '(face (:foreground "#404040"))))
 
 (ext
  '(org-mode)
 
-;("\\(\\#\\)" " ") ; hide comment #
+ ("\\(\\#\\)" " ")
 
-("^\\([ \t]*\\*+[ \t]\\)"
- 1 '(face (:foreground "#fcf5ee"))))
+ ("^\\([ \t]*\\*+[ \t]\\)"
+  1 '(face (:foreground "#f7f7f7"))))
 
-(defface icon-face
-  '((t (:family "FontAwesome"
-        :weight bold
-        :background  "#f9dcce"
-        :foreground  "#bca59b"
-        :overline    "#f9dcce"
-        :box (:color "#f9dcce"
-              :line-width 3
-              :style nil))))"")
-
-(defface icon-face-inactive
-  '((t (:family "FontAwesome"
-        :weight bold
-        :background  "#e6ddd7"
-        :foreground  "#acaeb1"
-        :overline    "#e6ddd7"
-        :box (:color "#e6ddd7"
-              :line-width 3
-              :style nil))))"")
+(defface icon-active '((t nil)) "header active icon")
+(defface icon-inactive '((t nil)) "header inactive icon.")
 
 (custom-set-faces
  '(rainbow-delimiters-depth-1-face    ((t (:foreground "#c79d83"))))
@@ -107,107 +88,32 @@
  '(window-divider                     ((t (:foreground "#f5efe8"))))
  '(window-divider-first-pixel         ((t (:foreground "#f5efe8"))))
  '(window-divider-last-pixel          ((t (:foreground "#f5efe8"))))
-
+ '(warning                            ((t (:foreground "#5e5958"
+                                           :weight bold))))
+ '(default                            ((t (:foreground "#5e5958"
+                                           :background "#fcf5ee"))))
  ;; SECTION: menu
  '(minibuffer-prompt                  ((t (:foreground "#9a9392"))))
  '(help-key-binding                   ((t (:foreground "#d2cbc6"))))
 
- ;; SECTION: functional
+ '(cursor                             ((t (:background "#9a9392"))))
  '(hl-line                            ((t (:background "#f5efe8"))))
+ '(highlight                          ((t (:foreground "#f5cac3"))))
+ '(show-paren-match                   ((t (:background "#faefea"))))
+ '(show-paren-mismatch                ((t (:background "#f5cac3"))))
  '(region                             ((t (:background "#dcd6d3"))))
- '(show-paren-match                   ((t (:background "#f5cac3"))))
- '(show-paren-mismatch                ((t (:background "#c6def4"))))
-
- '(isearch
-   ((t (:foreground "#faefea"
-        :background "#b9b5ae"))))
-
- '(lazy-highlight
-   ((t (:foreground "#b49c84"
-        :background "#edd7c2"))))
-
- '(highlight-indent-guides-character-face
-   ((t (:foreground "#f0e8e4"))))
-
- '(fringe
-   ((t (:foreground "#5e5958"
-        :background "#fcf5ee"))))
-
- ;; SECTION: webpages
- '(highlight         ((t (:foreground "#f5cac3"))))
- '(button            ((t (:foreground "#d3c2bb"))))
- '(link              ((t (:foreground "#84badd"))))
-
- '(browse-url-button ((t (:foreground "#d3c2bb"))))
- '(shr-link          ((t (:foreground "#9a9392"))))
-
- '(shr-text
-   ((t (:inherit default
-        :height 1.0
-        :family "Iosevka Comfy Medium"))))
-
- '(eww-h1
-   ((t (:inherit default
-        :height 1.3
-        :weight bold
-        :family "Iosevka Comfy Medium"))))
-
- '(eww-h2
-   ((t (:inherit default
-        :height 1.2
-        :weight bold
-        :family "Iosevka Comfy Medium"))))
-
- '(eww-h3
-   ((t (:inherit default
-        :height 1.1
-        :weight bold
-        :family "Iosevka Comfy Medium"))))
-
- '(eww-h4
-   ((t (:inherit default
-        :weight bold
-        :family "Iosevka Comfy Medium"))))
-
- '(eww-h5
-   ((t (:inherit default
-        :weight bold
-        :family "Iosevka Comfy Medium"))))
-
- '(eww-h6
-   ((t (:inherit default
-        :weight bold
-        :family "Iosevka Comfy Medium"))))
-
- '(eww-form-text
-   ((t :weight bold
-       :background  "#efe8e1"
-       :box (:color "#5e5958"
-             :line-width 2
-             :style nil))))
-
- '(eww-form-textarea
-   ((t :weight bold
-       :background  "#efe8e1"
-       :box (:color "#5e5958"
-             :line-width 2
-             :style nil))))
-
- '(eww-invalid-certificate
-   ((t (:foreground "#f5cac3"
-        :inherit bold))))
- '(eww-valid-certificate
-   ((t (:foreground "#d3c2bb"
-        :inherit bold))))
+ '(link                               ((t (:foreground "#9a9392"))))
+ '(button                             ((t (:foreground "#d3c2bb"))))
+ '(dired-directory                    ((t (:foreground "#9a9392"))))
 
  ;; SECIION: org-mode
- '(org-level-1        ((t (:height 1.5 :weight bold))))
- '(org-level-2        ((t (:height 1.4 :weight bold))))
- '(org-level-3        ((t (:height 1.3 :weight bold))))
- '(org-level-4        ((t (:height 1.2 :weight bold))))
- '(org-level-5        ((t (:height 1.1 :weight bold))))
- '(org-level-6        ((t (:height 1.0 :weight bold))))
- '(org-document-title ((t (:height 1.4 :weight bold))))
+ '(org-level-1                     ((t (:height 1.5 :weight bold))))
+ '(org-level-2                     ((t (:height 1.4 :weight bold))))
+ '(org-level-3                     ((t (:height 1.3 :weight bold))))
+ '(org-level-4                     ((t (:height 1.2 :weight bold))))
+ '(org-level-5                     ((t (:height 1.1 :weight bold))))
+ '(org-level-6                     ((t (:height 1.0 :weight bold))))
+ '(org-document-title              ((t (:height 1.4 :weight bold))))
 
  '(org-todo
    ((t (:foreground "#e9c8c3"
@@ -223,28 +129,30 @@
    ((t (:foreground "#d2cbc6"
         :background "#f4ede6" ))))
 
- '(org-block-begin-line
-   ((t (:foreground "#d2cbc6"
-        :background "#f4ede6"
-        :extend t ))))
-
- ;'(org-block-begin-line
- ;  ((t (:foreground "#f8f1ea"
- ;       :background "#f8f1ea"
- ;       :extend t ))))
-
  '(org-block ((t (:background "#f8f1ea" ))))
  '(org-table ((t (:foreground "#c9c6c3" ))))
  '(org-date  ((t (:foreground "#ccbfc2"
                   :underline nil))))
 
  ;; SECTION: fudgee barr
- '(header-line
-   ((t :weight bold
-       :box (:color "#fcf5ee"
-             :line-width 2
-             :style nil))))
-
+ '(icon
+     ((t (:family "FontAwesome"
+          :weight bold
+          :background  "#f9dcce"
+          :foreground  "#bca59b"
+          :overline    "#f9dcce"
+          :box (:color "#f9dcce"
+                :line-width 3
+                :style nil)))))
+ '(icon-inactive
+   ((t (:family "FontAwesome"
+        :weight bold
+        :background  "#e6ddd7"
+        :foreground  "#acaeb1"
+        :overline    "#e6ddd7"
+        :box (:color "#e6ddd7"
+              :line-width 3
+              :style nil)))))
  '(mode-line
    ((t :weight bold
        :foreground  "#b6a7a0"
@@ -253,7 +161,6 @@
        :box (:color "#fae7de"
              :line-width 2
              :style nil))))
-
  '(mode-line-inactive
    ((t :weight bold
        :foreground  "#acaeb1"
@@ -262,17 +169,9 @@
        :box (:color "#f0e8e2"
              :line-width 2
              :style nil))))
-
+ '(header-line
+   ((t nil )))
  '(header-line-highlight
    ((t :box (:color nil))))
-
  '(mode-line-highlight
-   ((t :box (:color nil))))
-
- ;; SECTION: defaults
- '(warning ((t (:foreground "#5e5958"
-                :weight bold))))
-
- '(default ((t (:foreground "#5e5958"
-                :background "#fcf5ee")))))
-
+   ((t :box (:color nil)))))

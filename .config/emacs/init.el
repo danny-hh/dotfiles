@@ -1,5 +1,5 @@
 ;;; init.el -*- lexical-binding: t -*-
-;;; Commentary: my lisp machine conf
+;;; Commentary: my lisp machine configuration
 
 (defun report()
   (interactive)
@@ -12,8 +12,8 @@
         (clipboard-kill-ring-save (point-min) (point-max))
         (message "y+ %s" buffer)))))
 
-;; C:\Users\User\AppData\Roaming\.emacs.d
-;; $HOME/.emacs.d
+;; Linux:   $HOME/.emacs.d
+;; Windows: C:\Users\User\AppData\Roaming\.emacs.d
 (setq default-directory user-emacs-directory
       custom-file "/dev/null") ; tu puta madre
 
@@ -26,8 +26,8 @@
                           (load-file file-path)))) '("fl.el"
                                                      "fm.el"
                                                      "kb.el"
+                                                     "ci.el"
                                                      "dired-nnn.el"))))
-;; require 'package is automatically called by use-package
 ;; package initialize isn't needed over v27
 (setq package-enable-at-startup nil)
 (setq package-archives
@@ -36,7 +36,8 @@
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
-  (package-install 'use-package))
+  (package-install 'use-package)
+  (require 'use-package))
 
 (defmacro install-packages (&rest packages)
   `(progn
@@ -52,6 +53,9 @@
  (svg-lib)
  (svg-tag-mode)
  (lua-mode)
+ (tree-sitter        :config (progn (global-tree-sitter-mode)
+                                    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
+ (tree-sitter-langs)
  (rainbow-delimiters :hook (prog-mode . rainbow-delimiters-mode))
  (rainbow-mode       :hook ((css-mode
                              lua-mode
@@ -91,6 +95,7 @@
     (message "hi %s, happy hacking!" user-name)))
 
 (setq inhibit-startup-screen t
+      initial-scratch-message ";; new comment \n\n"
       initial-buffer-choice nil
       confirm-kill-processes nil
       confirm-nonexistent-file-or-buffer nil)
@@ -98,8 +103,7 @@
 ;; line by line scrolling
 (setq scroll-step 1
       scroll-margin 5
-      scroll-conservatively 10
-      scroll-preserve-screen-position t)
+      scroll-conservatively 10000)
 
 (setq default-frame-alist
       '((font . "Iosevka Comfy Medium 10")
@@ -117,6 +121,11 @@
 (blink-cursor-mode 0)
 (show-paren-mode 1)
 (delete-selection-mode 1)
+
+;; no exposed gui
+(tooltip-mode -1)
+(setq use-dialog-box nil
+      use-file-dialog nil)
 
 ;; hide cursor on inactive windows
 (setq-default cursor-in-non-selected-windows nil)
@@ -137,45 +146,22 @@
       org-fontify-todo-headline t
       org-fontify-done-headline t
       org-cycle-level-faces nil
-      org-adapt-indentation nil)
+      org-adapt-indentation nil
+      org-pretty-entities t
+      org-use-sub-superscripts "^:{}"
+      org-hide-emphasis-markers t)
+(setq org-export-with-sub-superscripts nil)
 
 (setq svg-tag-tags
   '(("|[0-9a-zA-Z- ]+?|" . ((lambda (tag) (svg-tag-make tag
                                       :face 'font-lock-comment-face
-                                      :font-family "Iosevka Comfy Medium"
+                                      :font-family "Iosevka Mia Term Extended"
                                       :font-size 9
-                                      :radius 0
+                                      :radius 2
+                                      :inverse t :margin 0
                                       :beg 1 :end -1))))))
 
 (add-hook 'org-mode-hook 'svg-tag-mode 1)
-
-;; eww stuff
-(defvar url-address
-  '(("emacs"      . "http://web.archive.org/web/20070808235903/https://www.gnu.org/software/emacs/")
-    ("emacs girl" . "https://4chanarchives.com/board/k/thread/29900098")
-    ("g"          . "https://boards.4chan.org/g/")
-    ("fa"         . "https://boards.4chan.org/fa/")
-    ("his"        . "https://boards.4chan.org/his/")
-    ("furret"     . "https://e621.net/posts?page=4&tags=ke_mo_suke")))
-
-(defun docs()
-  (interactive)
-  (let ((buffer-name "*docs*"))
-    (with-current-buffer (get-buffer-create buffer-name)
-      (erase-buffer)
-      (insert "\nyou're fucking gay \n\n")
-      (let ((max-title-length (apply 'max (mapcar #'length
-                                          (mapcar #'car url-address)))))
-        (dolist (item url-address)
-          (let ((url-title (car item))
-                (url       (cdr item)))
-            (insert-button url-title 'action (lambda (_) (eww url)))
-            (insert (make-string (- (+ 2 max-title-length)
-                                    (length url-title)) ?\s))
-            (insert (format "%s\n" url))
-            (insert (make-string (window-width) ?-))
-            (insert "\n")))))
-    (switch-to-buffer buffer-name)))
 
 ;; my fudgee barr
 (setq-default mode-line-format nil)
@@ -183,7 +169,7 @@
 (defun fudgee-barr ()
   (dolist (window (window-list))
     (with-current-buffer (window-buffer window)
-      (let* ((str-right (format "Ln %d, Col %d    "
+      (let* ((str-right (format "Ln %d, Col %d     "
                                 (line-number-at-pos)
                                 (current-column)))
 
@@ -211,8 +197,8 @@
                        'mode-line-inactive))
 
              (icon (if (eq window (selected-window))
-                       (propertize "    " 'face 'icon-face)
-                       (propertize "    " 'face 'icon-face-inactive)))
+                       (propertize "     " 'face 'icon)
+                       (propertize "     " 'face 'icon-inactive)))
 
              (str-left-p  (propertize str-left 'face face))
              (str-right-p (propertize str-right 'face face))

@@ -57,7 +57,7 @@
 
 ;; unset defaults
 (dolist (kb-df '("C-a" "C-b" "C-c" "C-d" "C-e" "C-f" "C-g"
-                 "C-h" "C-k" "C-l" "C-n" "C-o" "C-p" "C-q"
+                 "C-k" "C-k" "C-l" "C-n" "C-o" "C-p" "C-q"
                  "C-s" "C-t" "C-u" "C-v" "C-w" "C-y" "C-z"
                  "C-/" "C-?" "<C-next>" "<C-prior>"
                  "<C-SPC>" "<escape>" "\e"))
@@ -72,6 +72,7 @@
 
 (setq eww-mode-map map-normal)
 (setq eww-link-keymap map-normal)
+;(setq special-mode-map map-normal)
 
 (defun switch-to-insert-mode ()
   (interactive)
@@ -139,6 +140,10 @@
       ("C-h r"    . eww-reload)
       ("<return>" . eww-follow-link)))
 
+(with-eval-after-load 'org
+  (kb :normal
+      ("C-o l"    . org-toggle-link-display)))
+
 ;; depends on: https://github.com/jcfk/dired-nnn
 (with-eval-after-load 'dired
   (kb :dired
@@ -151,14 +156,17 @@
 (kb :any
     ("<tab>"     . abort)
     ("<escape>"  . abort)
-    ("~"         . repeat)
+    ("<print>"   . report)
+    ("M-`"       . repeat)
     ("M-x"       . execute-extended-command)
     ("C-s"       . incremental-search)
     ("C-z"       . undo-only)
-    ("C-S-z"     . undo-redo)
+    ("C-r"       . undo-redo)
     ("C-S-v"     . clipboard-yank)
     ("C-h c"     . describe-char)
     ("C-h k"     . describe-key)
+    ("C-h m"     . describe-mode)
+    ("C-h l"     . list-faces-display)
     ("C-x f"     . find-file)
     ("C-x b"     . ibuffer)
     ("C-x k"     . kill-buffer)
