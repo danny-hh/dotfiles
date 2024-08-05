@@ -36,7 +36,10 @@ fcl()  { fc-list ;}
 fcf()  { fc-list : family | sort | uniq ;}
 fci()  { fc-match -v | grep -E 'hint|rgb|lcd|dpi' ;}
 
-# aliases are prone to quote errors.
+# aliases are prone to quote errors,
 # aliases are actually just functions,
-# but they can replace binary calls.
-alias sway="sway -d > $HOME/.cache/sway.log 2>&1"
+# aliases can replace binary calls,
+# but we can do the same thing
+# by putting command before sway.
+sway() { command sway -d > "$HOME/.cache/sway.log" 2>&1 ;}
+

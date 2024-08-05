@@ -53,9 +53,11 @@
  (svg-lib)
  (svg-tag-mode)
  (lua-mode)
+ (ahk-mode)
+ (powershell)
+ (tree-sitter-langs)
  (tree-sitter        :config (progn (global-tree-sitter-mode)
                                     (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
- (tree-sitter-langs)
  (rainbow-delimiters :hook (prog-mode . rainbow-delimiters-mode))
  (rainbow-mode       :hook ((css-mode
                              lua-mode
