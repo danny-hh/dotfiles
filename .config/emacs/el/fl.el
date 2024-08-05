@@ -136,14 +136,14 @@
 
  ;; SECTION: fudgee barr
  '(icon
-     ((t (:family "FontAwesome"
-          :weight bold
-          :background  "#f9dcce"
-          :foreground  "#bca59b"
-          :overline    "#f9dcce"
-          :box (:color "#f9dcce"
-                :line-width 3
-                :style nil)))))
+   ((t (:family "FontAwesome"
+        :weight bold
+        :background  "#f9dcce"
+        :foreground  "#bca59b"
+        :overline    "#f9dcce"
+        :box (:color "#f9dcce"
+              :line-width 3
+              :style nil)))))
  '(icon-inactive
    ((t (:family "FontAwesome"
         :weight bold
