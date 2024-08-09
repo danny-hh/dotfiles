@@ -53,7 +53,7 @@
  ("^\\([ \t]*\\*+[ \t]\\)"
   1 '(face (:foreground "#f7f7f7"))))
 
-(defface icon-active '((t nil)) "header active icon")
+(defface icon '((t nil)) "header active icon")
 (defface icon-inactive '((t nil)) "header inactive icon.")
 
 (custom-set-faces
