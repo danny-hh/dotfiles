@@ -55,6 +55,15 @@
       (insert pairs)
       (backward-char))))
 
+;; compiler instructions
+(defun instructions ()
+  (interactive)
+  (let* ((file-name         (buffer-file-name))
+         (file-base-name    (file-name-sans-extension (file-name-nondirectory file-name)))
+         (default-directory (file-name-directory file-name)))
+    (compile (format "make %s && ./%s"
+                     file-base-name file-base-name))))
+
 ;; unset defaults
 (dolist (kb-df '("C-a" "C-b" "C-c" "C-d" "C-e" "C-f" "C-g"
                  "C-k" "C-k" "C-l" "C-n" "C-o" "C-p" "C-q"
@@ -158,6 +167,7 @@
     ("<escape>"  . abort)
     ("<print>"   . report)
     ("M-`"       . repeat)
+    ("M-c"       . instructions)
     ("M-x"       . execute-extended-command)
     ("C-s"       . incremental-search)
     ("C-z"       . undo-only)

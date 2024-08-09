@@ -26,7 +26,6 @@
                           (load-file file-path)))) '("fl.el"
                                                      "fm.el"
                                                      "kb.el"
-                                                     "ci.el"
                                                      "dired-nnn.el"))))
 ;; package initialize isn't needed over v27
 (setq package-enable-at-startup nil)
