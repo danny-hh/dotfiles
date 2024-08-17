@@ -150,8 +150,7 @@
       org-adapt-indentation nil
       org-pretty-entities t
       org-use-sub-superscripts "^:{}"
-      org-hide-emphasis-markers t)
-(setq org-export-with-sub-superscripts nil)
+      org-export-with-sub-superscripts nil)
 
 (setq svg-tag-tags
   '(("|[0-9a-zA-Z- ]+?|" . ((lambda (tag) (svg-tag-make tag
