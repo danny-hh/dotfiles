@@ -1,0 +1,24 @@
+#!/bin/sh
+
+TERM="foot -e"
+VIDEO="mpv"
+IMAGE="mpv --scripts=$HOME/.config/mpv/script-opts/imim.lua"
+MUSIC="mpv --script=$HOME/.config/mpv/script-opts/piko.lua"
+
+case "${1##*.}" in
+    docx | doc | pdf)
+        $BROWSER "$1"
+        ;;
+    png | jpe | jpg | jpeg | jfif | avif | webp | gifv | gif)
+        $IMAGE "$1"
+        ;;
+    webm | wmv | mkv | mp4)
+        $VIDEO "$1"
+        ;;
+    opus | mp3 | flv)
+        $TERM $MUSIC "$1"
+        ;;
+    *)
+        $TERM emacs -nw --init-directory="/home/irhl/.config/emacs.d" "$1"
+        ;;
+esac

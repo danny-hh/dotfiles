@@ -1,0 +1,25 @@
+#!/bin/sh
+
+export NNN_USE_EDITOR=0
+export NNN_COLORS=7777
+export NNN_FCOLORS=c1e20b02006005f7c6d6abc4
+export NNN_OPENER="$HOME/.local/share/bin/milf"
+
+export NNN_BMS="\
+a:$HOME;\
+l:$HOME/.local/share;\
+c:$HOME/.config;\
+d:$HOME/Downloads;\
+b:$HOME/Projects;\
+g:$HOME/git;\
+v:$HOME/.config/nvim;\
+e:$HOME/.config/emacs.d;\
+m:/mnt"
+
+export NNN_PLUG="\
+1:empty_slot;\
+2:empty_slot;\
+3:empty_slot;\
+y:-!echo \$PWD/\$nnn|wl-copy*"
+
+/usr/bin/nnn "$@"
