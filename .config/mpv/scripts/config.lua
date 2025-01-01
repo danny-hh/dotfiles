@@ -28,7 +28,7 @@ M.keymaps = {
     ['/, MBTN_RIGHT'] = 'vf toggle hflip',
     e = 'cycle_values video-rotate 90 180 270 0',
 
-    f1 = 'af toggle superequalizer=2b=3:3b=1:4b=2',
+    f1 = 'af toggle equalizer=w=1:t=o:f=55:g=16:r=f64,dynaudnorm=b=1:m=1',
     f2 = 'af toggle asetrate=44100*1.08',
     f3 = 'af toggle asetrate=44100*1.12',
     f4 = 'af toggle asetrate=44100*1.22',
@@ -44,8 +44,7 @@ M.options = {
 
     vo = 'gpu',
     video_sync = 'audio',
-    gpu_api = 'vulkan',
-    gpu_context = 'waylandvk',
+    audio_display = 'no',
 
     scale = 'ewa_lanczos',
     cscale = 'ewa_lanczos',
@@ -83,11 +82,6 @@ M.options = {
 
     slang = 'nl,jp,jpn,en,eng',
     alang = 'nl,jp,jpn,en,eng',
-}
-
-M.scripts = {
-    -- mpv-player/mpv/tree/master/TOOLS/lua
-    "/.config/mpv/script-opts/autoload.lua"
 }
 
 return M

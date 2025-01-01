@@ -2,8 +2,8 @@
 
 TERM="foot -e"
 VIDEO="mpv"
-IMAGE="mpv --scripts=$HOME/.config/mpv/script-opts/imim.lua"
-MUSIC="mpv --script=$HOME/.config/mpv/script-opts/piko.lua"
+IMAGE="mpv"
+MUSIC="mpv"
 
 case "${1##*.}" in
     docx | doc | pdf)
@@ -15,7 +15,7 @@ case "${1##*.}" in
     webm | wmv | mkv | mp4)
         $VIDEO "$1"
         ;;
-    opus | mp3 | flv)
+    opus | mp3 | flac)
         $TERM $MUSIC "$1"
         ;;
     *)

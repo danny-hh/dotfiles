@@ -1,4 +1,10 @@
 #!/bin/sh
 
+if [ ! -x "$(command -v "$1")" ]; then
+    printf '%s\n' "$0 [executable]"
+    exit 1
+fi
+
+# launch and detach process from the terminal
 setsid "$@" > /dev/null 2>&1 &
 exec true
