@@ -20,7 +20,7 @@ case $1 in
     mp4)
         yt-dlp $2 \
                 --write-sub --sub-lang=en \
-                -f 'bestvideo[height<=1080]+bestaudio/best[height<=1080]/best' \
+                -f "bestvideo[ext=mp4][height<=1080]+bestaudio[ext=m4a]/best[height<=1080]" \
                 -o "$HOME/Videos/%(title)s.%(ext)s"
         ;;
 esac
